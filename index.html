@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <title>Lietoti Biznesa Klases Klēpjdatori | LaptopHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:400,600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f4f5f7;
+      color: #222e36;
+    }
+
+    /* Navigation */
+    nav {
+      background: #233259;
+      padding: 16px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #fff;
+      text-decoration: none;
+    }
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 32px;
+      align-items: center;
+    }
+    .nav-menu a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .nav-menu a:hover {
+      opacity: 0.8;
+    }
+    .admin-link {
+      background: #425671;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    /* Header Hero */
+    header {
+      background: linear-gradient(120deg, #e6eaee 60%, #2d3a4c 100%);
+      padding: 60px 20px 50px 20px;
+      text-align: center;
+    }
+    .hero {
+      max-width: 700px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      padding: 45px 35px 35px 35px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .hero-title {
+      font-size: 2.2rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #233259;
+    }
+    .hero-tagline {
+      font-size: 1.1rem;
+      margin-bottom: 35px;
+      color: #475067;
+      line-height: 1.6;
+    }
+
+    /* Laptop Rotator */
+    .hero-rotator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 30px;
+      width: 100%;
+    }
+    .laptop-img {
+      width: 380px;
+      height: 190px;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(44, 62, 80, 0.08);
+      background: #eef1f5;
+      margin: 0 20px;
+      transition: box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .laptop-img:hover {
+      box-shadow: 0 6px 20px rgba(44, 62, 80, 0.12);
+    }
+    .rot-btn {
+      background: #233259;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: background 0.16s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .rot-btn:hover {
+      background: #3a4b6e;
+    }
+
+    /* Laptop Info */
+    .laptop-info {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .laptop-model {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #233259;
+      margin-bottom: 8px;
+    }
+    .laptop-specs {
+      color: #5a6b7d;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .shop-btn {
+      background: #233259;
+      color: #fff;
+      border: none;
+      padding: 14px 40px;
+      border-radius: 32px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(44, 62, 80, 0.08);
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+      transition: background 0.14s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .shop-btn:hover {
+      background: #425671;
+    }
+
+    /* Highlights */
+    .highlights {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .highlight-item {
+      background: #edf2f6;
+      color: #223146;
+      border-radius: 10px;
+      padding: 10px 24px;
+      font-size: 0.95rem;
+      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
+      font-weight: 500;
+    }
+
+    /* Newsletter */
+    .newsletter {
+      margin: 60px auto;
+      max-width: 450px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 10px rgba(56, 72, 97, 0.07);
+      padding: 30px 35px;
+      text-align: center;
+    }
+    .news-title {
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+      color: #25344e;
+      font-weight: 600;
+    }
+    .news-subtitle {
+      color: #5a6b7d;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
+    .newsletter form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+    .newsletter input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid #b3bfcf;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+    }
+    .newsletter input:focus {
+      outline: none;
+      border-color: #233259;
+    }
+    .newsletter button {
+      background: #233259;
+      color: #fff;
+      border: none;
+      border-radius: 24px;
+      padding: 11px 40px;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: background 0.13s;
+    }
+    .newsletter button:hover {
+      background: #425671;
+    }
+
+    /* Footer */
+    footer {
+      background: #2d3a4c;
+      color: #d4dae1;
+      padding: 30px 20px;
+      text-align: center;
+      margin-top: 40px;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: #d4dae1;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover {
+      color: #fff;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 30px 20px;
+      }
+      .hero-title {
+        font-size: 1.6rem;
+      }
+      .hero-tagline {
+        font-size: 1rem;
+      }
+      .laptop-img {
+        width: 70vw;
+        max-width: 320px;
+        height: 160px;
+        margin: 0 10px;
+      }
+      .rot-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 1.3rem;
+      }
+      .highlights {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+      .nav-menu {
+        gap: 18px;
+        font-size: 0.9rem;
+      }
+      .newsletter {
+        margin: 40px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">💼 LaptopHub</a>
+      <ul class="nav-menu">
+        <li><a href="index.html">Sākums</a></li>
+        <li><a href="products.html">Veikals</a></li>
+        <li><a href="about.html">Par Mums</a></li>
+        <li><a href="contact.html">Kontakti</a></li>
+        <li><a href="login.html" class="admin-link">Admin</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header>
+    <div class="hero">
+      <div class="hero-title">Augstākās Kvalitātes Biznesa Klēpjdatori. Saprātīgas Cenas.</div>
+      <div class="hero-tagline">ThinkPad, Dell Latitude un HP EliteBook—rūpīgi pārbaudīti un sertificēti kvalitātei.</div>
+
+      <div class="hero-rotator">
+        <button class="rot-btn" onclick="rotateLaptop(-1)" aria-label="Iepriekšējais klēpjdators">‹</button>
+        <img class="laptop-img" id="laptopImage" src="" alt="Biznesa Klēpjdators" onclick="goToDetail()">
+        <button class="rot-btn" onclick="rotateLaptop(1)" aria-label="Nākamais klēpjdators">›</button>
+      </div>
+
+      <div class="laptop-info" id="laptopInfo">
+        <div class="laptop-model"></div>
+        <div class="laptop-specs"></div>
+      </div>
+
+      <a href="#" class="shop-btn" id="shopNowBtn">Apskatīt Detaļas</a>
+
+      <div class="highlights">
+        <span class="highlight-item">✓ Sertificēta Kvalitāte</span>
+        <span class="highlight-item">✓ 1 Gada Garantija</span>
+        <span class="highlight-item">✓ Bezmaksas Piegāde</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Newsletter Section -->
+  <section class="newsletter">
+    <div class="news-title">Saņemiet Jaunumus</div>
+    <div class="news-subtitle">Uzziniet par jauniem klēpjdatoriem vai īpašiem piedāvājumiem!</div>
+    <form id="newsletterForm">
+      <input type="text" placeholder="Jūsu Vārds" name="name" required>
+      <input type="email" placeholder="Jūsu E-pasts" name="email" required>
+      <button type="submit">Pierakstīties</button>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="index.html">Sākums</a>
+      <a href="products.html">Veikals</a>
+      <a href="about.html">Par Mums</a>
+      <a href="contact.html">Kontakti</a>
+    </div>
+    <p>&copy; 2024 LaptopHub. Visas tiesības aizsargātas.</p>
+  </footer>
+
+  <script>
+    // Get default laptops
+    function getDefaultLaptops() {
+      return [
+        {
+          brand: 'Lenovo ThinkPad',
+          model: 'ThinkPad T490',
+          processor: 'Intel Core i7',
+          ram: '16GB RAM',
+          storage: '512GB SSD',
+          screen: '14" FHD Display',
+          price: 549,
+          condition: 'excellent',
+          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+T490',
+          description: 'Profesionāls biznesa klēpjdators ar izcilu veiktspēju'
+        },
+        {
+          brand: 'Dell Latitude',
+          model: 'Latitude 5490',
+          processor: 'Intel Core i7',
+          ram: '16GB RAM',
+          storage: '512GB SSD',
+          screen: '14" FHD Display',
+          price: 499,
+          condition: 'excellent',
+          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=Dell+Latitude+5490',
+          description: 'Uzticams Dell biznesa klēpjdators'
+        },
+        {
+          brand: 'HP EliteBook',
+          model: 'EliteBook 840 G6',
+          processor: 'Intel Core i5',
+          ram: '8GB RAM',
+          storage: '256GB SSD',
+          screen: '14" FHD Display',
+          price: 449,
+          condition: 'very-good',
+          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=HP+EliteBook+840',
+          description: 'Kompakts un jaudīgs HP klēpjdators'
+        },
+        {
+          brand: 'Lenovo ThinkPad',
+          model: 'X1 Carbon Gen 7',
+          processor: 'Intel Core i7',
+          ram: '16GB RAM',
+          storage: '512GB SSD',
+          screen: '14" FHD Touch',
+          price: 829,
+          condition: 'excellent',
+          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+X1+Carbon',
+          description: 'Premium ultrabook ar skārienekrānu'
+        }
+      ];
+    }
+
+    // Load laptops from localStorage or use defaults
+    let laptops = JSON.parse(localStorage.getItem('laptops')) || getDefaultLaptops();
+
+    // Save defaults if none exist
+    if (!localStorage.getItem('laptops')) {
+      localStorage.setItem('laptops', JSON.stringify(laptops));
+    }
+
+    let current = 0;
+
+    function rotateLaptop(delta) {
+      current = (current + delta + laptops.length) % laptops.length;
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      const laptop = laptops[current];
+      const img = document.getElementById('laptopImage');
+      const info = document.getElementById('laptopInfo');
+      const shopBtn = document.getElementById('shopNowBtn');
+
+      img.src = laptop.imageUrl;
+      img.alt = `${laptop.brand} ${laptop.model}`;
+
+      info.innerHTML = `
+        <div class="laptop-model">${laptop.brand} ${laptop.model}</div>
+        <div class="laptop-specs">${laptop.processor} • ${laptop.ram} • ${laptop.storage} • $${laptop.price}</div>
+      `;
+
+      shopBtn.href = `laptop-detail.html?id=${current}`;
+    }
+
+    function goToDetail() {
+      window.location.href = `laptop-detail.html?id=${current}`;
+    }
+
+    // Newsletter form handler
+    document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const name = formData.get('name');
+      const email = formData.get('email');
+
+      alert(`Paldies, ${name}! Jūs esat pierakstījies.\nMēs sūtīsim jaunumus uz: ${email}`);
+      this.reset();
+    });
+
+    // Initialize
+    updateDisplay();
+
+    // Reload laptops when page becomes visible (in case admin added new ones)
+    document.addEventListener('visibilitychange', function() {
+      if (!document.hidden) {
+        laptops = JSON.parse(localStorage.getItem('laptops')) || getDefaultLaptops();
+        if (current >= laptops.length) current = 0;
+        updateDisplay();
+      }
+    });
+  </script>
+</body>
+</html>
