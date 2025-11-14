@@ -418,19 +418,45 @@
 
   <script>
     // Contact form handler
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
       e.preventDefault();
 
       const formData = new FormData(this);
-      const name = formData.get('name');
-      const email = formData.get('email');
-      const phone = formData.get('phone');
-      const message = formData.get('message');
+      const data = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        message: formData.get('message')
+      };
 
-      // In a real application, this would send data to a server
-      alert(`Paldies, ${name}!\n\nJūsu ziņa ir saņemta. Mēs ar jums sazināsimies tuvākajā laikā uz e-pastu: ${email}`);
+      const submitBtn = this.querySelector('.submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Nosūta...';
 
-      this.reset();
+      try {
+        const response = await fetch('/api/contact.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert(`Paldies, ${data.name}!\n\nJūsu ziņa ir saņemta. Mēs ar jums sazināsimies tuvākajā laikā uz e-pastu: ${data.email}`);
+          this.reset();
+        } else {
+          alert('Kļūda: ' + result.error);
+        }
+      } catch (error) {
+        alert('Neizdevās nosūtīt ziņu. Lūdzu, mēģiniet vēlreiz.');
+        console.error('Error:', error);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Nosūtīt Ziņu';
+      }
     });
   </script>
 </body>
