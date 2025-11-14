@@ -148,22 +148,16 @@
       submitBtn.textContent = 'Nosūta...';
 
       try {
-        const response = await fetch('/api/contact.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
+        // Store contact in localStorage for demo purposes
+        const contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+        contacts.push({
+          ...data,
+          submitted_at: new Date().toISOString()
         });
+        localStorage.setItem('contacts', JSON.stringify(contacts));
 
-        const result = await response.json();
-
-        if (result.success) {
-          alert(`Paldies, ${data.name}!\n\nJūsu ziņa ir saņemta. Mēs ar jums sazināsimies tuvākajā laikā uz e-pastu: ${data.email}`);
-          this.reset();
-        } else {
-          alert('Kļūda: ' + result.error);
-        }
+        alert(`Paldies, ${data.name}!\n\nJūsu ziņa ir saņemta. Mēs ar jums sazināsimies tuvākajā laikā uz e-pastu: ${data.email}`);
+        this.reset();
       } catch (error) {
         alert('Neizdevās nosūtīt ziņu. Lūdzu, mēģiniet vēlreiz.');
         console.error('Error:', error);

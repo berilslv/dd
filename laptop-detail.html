@@ -68,21 +68,15 @@
     };
 
     // Load laptop details
-    async function loadLaptopDetails() {
+    function loadLaptopDetails() {
       const urlParams = new URLSearchParams(window.location.search);
       const laptopId = parseInt(urlParams.get('id'));
 
       const container = document.getElementById('laptopDetail');
 
       try {
-        const response = await fetch('/api/laptops.php');
-        const result = await response.json();
-
-        if (!result.success) {
-          throw new Error(result.error || 'Failed to fetch laptops');
-        }
-
-        const laptops = result.laptops;
+        // Get laptops from localStorage
+        const laptops = JSON.parse(localStorage.getItem('laptops')) || [];
         const laptop = laptops[laptopId];
 
 

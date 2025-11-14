@@ -72,93 +72,39 @@
   </div>
 
   <script>
-    // Global variable to store uploaded images
-    let uploadedImages = [];
-
-    // Track if we're editing a laptop (now storing laptop ID instead of index)
-    let editingLaptopId = null;
-    let laptopsData = [];
-
-    // Check if already logged in via API
-    async function checkSession() {
-      try {
-        const response = await fetch('/api/auth.php');
-        const result = await response.json();
-
-        if (result.success && result.loggedIn) {
-          showAdminPanel();
-        }
-      } catch (error) {
-        console.error('Error checking session:', error);
-      }
-    }
-
-    checkSession();
-
-    // Image Upload Handlers
-    const uploadArea = document.getElementById('uploadArea');
-    const imageInput = document.getElementById('imageInput');
-    const imagePreviews = document.getElementById('imagePreviews');
-
-    uploadArea.addEventListener('click', () => {
-      imageInput.click();
-    });
-
-    imageInput.addEventListener('change', (e) => {
-      handleImageFiles(e.target.files);
-    });
-
-    uploadArea.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      uploadArea.classList.add('dragover');
-    });
-
-    uploadArea.addEventListener('dragleave', () => {
-      uploadArea.classList.remove('dragover');
-    });
-
-    uploadArea.addEventListener('drop', (e) => {
-      e.preventDefault();
-      uploadArea.classList.remove('dragover');
-      handleImageFiles(e.dataTransfer.files);
-    });
+    // Admin credentials (for demo purposes - in production, use proper backend authentication)
+    const ADMIN_USERNAME = 'admin';
+    const ADMIN_PASSWORD = 'admin123';
 
     // Check if already logged in
     if (localStorage.getItem('adminLoggedIn') === 'true') {
       window.location.href = 'add_laptops.html';
     }
 
-    // Rating Sliders
-    const visualRating = document.getElementById('visualRating');
-    const technicalRating = document.getElementById('technicalRating');
-    const visualRatingValue = document.getElementById('visualRatingValue');
-    const technicalRatingValue = document.getElementById('technicalRatingValue');
-
-    visualRating.addEventListener('input', (e) => {
-      visualRatingValue.textContent = e.target.value;
-    });
-
-    technicalRating.addEventListener('input', (e) => {
-      technicalRatingValue.textContent = e.target.value;
-    });
+    // Hide error message initially
+    const errorMessage = document.getElementById('errorMessage');
+    errorMessage.style.display = 'none';
 
     // Login form handler
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
-      const errorMessage = document.getElementById('errorMessage');
       const submitBtn = this.querySelector('button[type="submit"]');
 
+      // Disable button during processing
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Apstrādā...';
+
+      // Simple client-side authentication (for static hosting)
       if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
         localStorage.setItem('adminLoggedIn', 'true');
-        errorMessage.classList.remove('show');
+        errorMessage.style.display = 'none';
         // Redirect to add laptops page
         window.location.href = 'add_laptops.html';
       } else {
-        errorMessage.classList.add('show');
-      } finally {
+        errorMessage.style.display = 'block';
         submitBtn.disabled = false;
         submitBtn.textContent = 'Ielogoties';
       }

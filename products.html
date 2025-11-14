@@ -81,20 +81,10 @@
     let filteredLaptops = [];
 
     // Fetch laptops from API
-    async function fetchLaptops() {
-      try {
-        const response = await fetch('/api/laptops.php');
-        const result = await response.json();
-
-        if (result.success) {
-          laptops = result.laptops;
-          applyFilters();
-        } else {
-          console.error('Failed to fetch laptops:', result.error);
-        }
-      } catch (error) {
-        console.error('Error fetching laptops:', error);
-      }
+    function fetchLaptops() {
+      // Get laptops from localStorage or use empty array
+      laptops = JSON.parse(localStorage.getItem('laptops')) || [];
+      applyFilters();
     }
 
     // Condition labels in Latvian
