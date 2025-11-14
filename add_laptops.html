@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <title>Pievienot Klēpjdatorus | LaptopHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:400,600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #233259 0%, #425671 100%);
+      color: #222e36;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navigation */
+    nav {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 16px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #fff;
+      text-decoration: none;
+    }
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 32px;
+      align-items: center;
+    }
+    .nav-menu a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .nav-menu a:hover {
+      opacity: 0.8;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    /* Admin Panel */
+    .admin-panel {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      max-width: 900px;
+      width: 100%;
+    }
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e8ecf0;
+    }
+    .admin-title {
+      font-size: 2rem;
+      color: #233259;
+      font-weight: 600;
+    }
+    .logout-btn {
+      background: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.14s;
+    }
+    .logout-btn:hover {
+      background: #c82333;
+    }
+
+    .admin-form-group {
+      margin-bottom: 20px;
+    }
+    .form-label {
+      display: block;
+      font-weight: 600;
+      color: #233259;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 8px;
+      border: 1px solid #b3bfcf;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: #233259;
+    }
+
+    /* Image Upload Section */
+    .image-upload-section {
+      margin-bottom: 20px;
+    }
+    .upload-options {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .upload-tab {
+      padding: 10px 20px;
+      background: #e8ecf0;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .upload-tab.active {
+      background: #233259;
+      color: #fff;
+    }
+    .upload-content {
+      display: none;
+    }
+    .upload-content.active {
+      display: block;
+    }
+    .file-upload-area {
+      border: 2px dashed #b3bfcf;
+      border-radius: 8px;
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #f8f9fa;
+    }
+    .file-upload-area:hover {
+      border-color: #233259;
+      background: #e8ecf0;
+    }
+    .file-upload-area.dragover {
+      border-color: #233259;
+      background: #e8ecf0;
+    }
+    .upload-icon {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+    .upload-text {
+      color: #5a6b7d;
+      font-size: 0.95rem;
+    }
+    #fileInput {
+      display: none;
+    }
+    .image-preview {
+      margin-top: 15px;
+      display: none;
+    }
+    .image-preview.show {
+      display: block;
+    }
+    .preview-img {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .remove-image-btn {
+      background: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .add-laptop-btn {
+      background: #28a745;
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.14s;
+      margin-top: 10px;
+    }
+    .add-laptop-btn:hover {
+      background: #218838;
+    }
+    .add-laptop-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .laptops-list {
+      margin-top: 30px;
+    }
+    .laptops-list h3 {
+      font-size: 1.4rem;
+      color: #233259;
+      margin-bottom: 20px;
+    }
+    .laptop-item {
+      background: #f8f9fa;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .laptop-item-info {
+      flex: 1;
+    }
+    .laptop-item-name {
+      font-weight: 600;
+      color: #233259;
+      margin-bottom: 5px;
+    }
+    .laptop-item-price {
+      color: #5a6b7d;
+      font-size: 0.9rem;
+    }
+    .delete-btn {
+      background: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.14s;
+    }
+    .delete-btn:hover {
+      background: #c82333;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .admin-panel {
+        padding: 35px 25px;
+      }
+      .admin-title {
+        font-size: 1.6rem;
+      }
+      .nav-menu {
+        gap: 18px;
+        font-size: 0.9rem;
+      }
+      .upload-options {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">💼 LaptopHub</a>
+      <ul class="nav-menu">
+        <li><a href="index.html">Sākums</a></li>
+        <li><a href="products.html">Veikals</a></li>
+        <li><a href="about.html">Par Mums</a></li>
+        <li><a href="contact.html">Kontakti</a></li>
+        <li><a href="gallery.html">Galerija</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminPanel">
+      <div class="admin-header">
+        <h1 class="admin-title">Pievienot Klēpjdatorus</h1>
+        <button class="logout-btn" onclick="logout()">Iziet</button>
+      </div>
+
+      <h2 style="color: #233259; margin-bottom: 20px;">Pievienot Jaunu Klēpjdatoru</h2>
+
+      <form id="addLaptopForm">
+        <div class="admin-form-group">
+          <label class="form-label">Zīmols</label>
+          <input type="text" name="brand" class="form-input" required>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="form-label">Modelis</label>
+          <input type="text" name="model" class="form-input" required>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="form-label">Procesors</label>
+          <input type="text" name="processor" class="form-input" required>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="form-label">RAM</label>
+          <input type="text" name="ram" class="form-input" placeholder="piemēram, 16GB RAM" required>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="form-label">Atmiņa</label>
+          <input type="text" name="storage" class="form-input" placeholder="piemēram, 512GB SSD" required>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="form-label">Ekrāns</label>
+          <input type="text" name="screen" class="form-input" placeholder='piemēram, 14" FHD Display' required>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="form-label">Cena ($)</label>
+          <input type="number" name="price" class="form-input" required>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="form-label">Stāvoklis</label>
+          <select name="condition" class="form-input" required>
+            <option value="excellent">Izcils</option>
+            <option value="very-good">Ļoti Labs</option>
+            <option value="good">Labs</option>
+          </select>
+        </div>
+
+        <!-- Image Upload Section -->
+        <div class="image-upload-section">
+          <label class="form-label">Attēls</label>
+          <div class="upload-options">
+            <button type="button" class="upload-tab active" onclick="switchTab('device')">Augšupielādēt no ierīces</button>
+            <button type="button" class="upload-tab" onclick="switchTab('url')">URL saite</button>
+          </div>
+
+          <!-- Device Upload -->
+          <div id="deviceUpload" class="upload-content active">
+            <div class="file-upload-area" id="fileUploadArea" onclick="document.getElementById('fileInput').click()">
+              <div class="upload-icon">📁</div>
+              <div class="upload-text">
+                <strong>Noklikšķiniet lai izvēlētos</strong> vai ievelciet attēlu šeit<br>
+                <small>PNG, JPG, JPEG (maks. 5MB)</small>
+              </div>
+            </div>
+            <input type="file" id="fileInput" accept="image/*">
+            <div class="image-preview" id="imagePreview">
+              <img id="previewImg" class="preview-img" alt="Preview">
+              <br>
+              <button type="button" class="remove-image-btn" onclick="removeImage()">Noņemt attēlu</button>
+            </div>
+          </div>
+
+          <!-- URL Upload -->
+          <div id="urlUpload" class="upload-content">
+            <input type="text" id="imageUrlInput" class="form-input" placeholder="Ievadiet attēla URL">
+          </div>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="form-label">Apraksts</label>
+          <textarea name="description" class="form-input" style="min-height: 80px;" required></textarea>
+        </div>
+
+        <button type="submit" class="add-laptop-btn" id="submitBtn">Pievienot Klēpjdatoru</button>
+      </form>
+
+      <div class="laptops-list">
+        <h3>Esošie Klēpjdatori</h3>
+        <div id="laptopsList"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check if user is logged in
+    if (localStorage.getItem('adminLoggedIn') !== 'true') {
+      window.location.href = 'login.html';
+    }
+
+    let uploadedImageData = null;
+    let currentTab = 'device';
+
+    // Switch between upload tabs
+    function switchTab(tab) {
+      currentTab = tab;
+
+      // Update tab buttons
+      document.querySelectorAll('.upload-tab').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+
+      // Update content
+      document.querySelectorAll('.upload-content').forEach(content => {
+        content.classList.remove('active');
+      });
+
+      if (tab === 'device') {
+        document.getElementById('deviceUpload').classList.add('active');
+      } else {
+        document.getElementById('urlUpload').classList.add('active');
+      }
+    }
+
+    // File input handler
+    document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+
+    function handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (file) {
+        processFile(file);
+      }
+    }
+
+    // Drag and drop handlers
+    const uploadArea = document.getElementById('fileUploadArea');
+
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) {
+        processFile(file);
+      } else {
+        alert('Lūdzu, augšupielādējiet attēlu (PNG, JPG, JPEG)');
+      }
+    });
+
+    // Process uploaded file
+    function processFile(file) {
+      // Check file size (5MB max)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Attēls ir pārāk liels! Maksimālais izmērs: 5MB');
+        return;
+      }
+
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        alert('Lūdzu, augšupielādējiet attēlu (PNG, JPG, JPEG)');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        uploadedImageData = e.target.result;
+        document.getElementById('previewImg').src = uploadedImageData;
+        document.getElementById('imagePreview').classList.add('show');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Remove image
+    function removeImage() {
+      uploadedImageData = null;
+      document.getElementById('fileInput').value = '';
+      document.getElementById('imagePreview').classList.remove('show');
+    }
+
+    // Logout
+    function logout() {
+      localStorage.removeItem('adminLoggedIn');
+      window.location.href = 'login.html';
+    }
+
+    // Get default laptops
+    function getDefaultLaptops() {
+      return [
+        {
+          brand: 'Lenovo ThinkPad',
+          model: 'ThinkPad T490',
+          processor: 'Intel Core i7',
+          ram: '16GB RAM',
+          storage: '512GB SSD',
+          screen: '14" FHD Display',
+          price: 549,
+          condition: 'excellent',
+          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+T490',
+          description: 'Profesionāls biznesa klēpjdators ar izcilu veiktspēju'
+        },
+        {
+          brand: 'Dell Latitude',
+          model: 'Latitude 5490',
+          processor: 'Intel Core i7',
+          ram: '16GB RAM',
+          storage: '512GB SSD',
+          screen: '14" FHD Display',
+          price: 499,
+          condition: 'excellent',
+          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=Dell+Latitude+5490',
+          description: 'Uzticams Dell biznesa klēpjdators'
+        },
+        {
+          brand: 'HP EliteBook',
+          model: 'EliteBook 840 G6',
+          processor: 'Intel Core i5',
+          ram: '8GB RAM',
+          storage: '256GB SSD',
+          screen: '14" FHD Display',
+          price: 449,
+          condition: 'very-good',
+          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=HP+EliteBook+840',
+          description: 'Kompakts un jaudīgs HP klēpjdators'
+        },
+        {
+          brand: 'Lenovo ThinkPad',
+          model: 'X1 Carbon Gen 7',
+          processor: 'Intel Core i7',
+          ram: '16GB RAM',
+          storage: '512GB SSD',
+          screen: '14" FHD Touch',
+          price: 829,
+          condition: 'excellent',
+          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+X1+Carbon',
+          description: 'Premium ultrabook ar skārienekrānu'
+        }
+      ];
+    }
+
+    // Add laptop form handler
+    document.getElementById('addLaptopForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Get image URL based on current tab
+      let imageUrl;
+      if (currentTab === 'device') {
+        if (!uploadedImageData) {
+          alert('Lūdzu, augšupielādējiet attēlu!');
+          return;
+        }
+        imageUrl = uploadedImageData;
+      } else {
+        imageUrl = document.getElementById('imageUrlInput').value.trim();
+        if (!imageUrl) {
+          alert('Lūdzu, ievadiet attēla URL!');
+          return;
+        }
+      }
+
+      const formData = new FormData(this);
+      const newLaptop = {
+        brand: formData.get('brand'),
+        model: formData.get('model'),
+        processor: formData.get('processor'),
+        ram: formData.get('ram'),
+        storage: formData.get('storage'),
+        screen: formData.get('screen'),
+        price: parseInt(formData.get('price')),
+        condition: formData.get('condition'),
+        imageUrl: imageUrl,
+        description: formData.get('description')
+      };
+
+      let laptops = JSON.parse(localStorage.getItem('laptops')) || getDefaultLaptops();
+      laptops.push(newLaptop);
+      localStorage.setItem('laptops', JSON.stringify(laptops));
+
+      alert('Klēpjdators veiksmīgi pievienots!');
+      this.reset();
+      removeImage();
+      document.getElementById('imageUrlInput').value = '';
+      loadLaptopsList();
+    });
+
+    // Load and display laptops list
+    function loadLaptopsList() {
+      const laptops = JSON.parse(localStorage.getItem('laptops')) || getDefaultLaptops();
+      const listContainer = document.getElementById('laptopsList');
+
+      if (laptops.length === 0) {
+        listContainer.innerHTML = '<p style="color: #5a6b7d;">Nav pievienotu klēpjdatoru.</p>';
+        return;
+      }
+
+      listContainer.innerHTML = laptops.map((laptop, index) => `
+        <div class="laptop-item">
+          <div class="laptop-item-info">
+            <div class="laptop-item-name">${laptop.brand} ${laptop.model}</div>
+            <div class="laptop-item-price">$${laptop.price} • ${laptop.processor} • ${laptop.ram}</div>
+          </div>
+          <button class="delete-btn" onclick="deleteLaptop(${index})">Dzēst</button>
+        </div>
+      `).join('');
+    }
+
+    // Delete laptop
+    function deleteLaptop(index) {
+      if (!confirm('Vai tiešām vēlaties dzēst šo klēpjdatoru?')) {
+        return;
+      }
+
+      let laptops = JSON.parse(localStorage.getItem('laptops')) || getDefaultLaptops();
+      laptops.splice(index, 1);
+      localStorage.setItem('laptops', JSON.stringify(laptops));
+
+      alert('Klēpjdators dzēsts!');
+      loadLaptopsList();
+    }
+
+    // Initialize laptops if none exist
+    if (!localStorage.getItem('laptops')) {
+      localStorage.setItem('laptops', JSON.stringify(getDefaultLaptops()));
+    }
+
+    // Load laptops list on page load
+    loadLaptopsList();
+  </script>
+</body>
+</html>
