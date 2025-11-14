@@ -284,6 +284,172 @@
       margin-bottom: 15px;
     }
 
+    /* Image Gallery Styles */
+    .image-gallery {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .main-image-container {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      background: #2d3a4c;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: move;
+    }
+    .main-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: transform 0.1s ease-out;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .image-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(35, 50, 89, 0.8);
+      color: #fff;
+      border: none;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .image-nav-btn:hover {
+      background: rgba(66, 86, 113, 0.95);
+    }
+    .image-nav-btn.prev {
+      left: 15px;
+    }
+    .image-nav-btn.next {
+      right: 15px;
+    }
+    .image-nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    .image-counter {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(35, 50, 89, 0.9);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      z-index: 10;
+    }
+    .zoom-controls {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      background: rgba(35, 50, 89, 0.9);
+      padding: 8px 12px;
+      border-radius: 25px;
+      z-index: 10;
+    }
+    .zoom-btn {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.2rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .zoom-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .zoom-level {
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      min-width: 60px;
+      justify-content: center;
+    }
+    .thumbnails {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 5px 0;
+    }
+    .thumbnail {
+      min-width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: all 0.2s;
+    }
+    .thumbnail:hover {
+      transform: scale(1.05);
+    }
+    .thumbnail.active {
+      border-color: #233259;
+      box-shadow: 0 4px 12px rgba(35, 50, 89, 0.3);
+    }
+
+    /* Rating Display */
+    .ratings-section {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+    .rating-box {
+      flex: 1;
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .rating-label {
+      font-size: 0.85rem;
+      color: #5a6b7d;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    .rating-score {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #233259;
+    }
+    .rating-score span {
+      font-size: 1.2rem;
+      color: #8a95a3;
+    }
+    .rating-stars {
+      color: #ffc107;
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .detail-grid {
@@ -356,8 +522,11 @@
           screen: '14" FHD Display',
           price: 549,
           condition: 'excellent',
+          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+T490+Front', 'https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+T490+Side', 'https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+T490+Back'],
           imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+T490',
-          description: 'Profesionāls biznesa klēpjdators ar izcilu veiktspēju'
+          description: 'Profesionāls biznesa klēpjdators ar izcilu veiktspēju',
+          visualRating: 9,
+          technicalRating: 9
         },
         {
           brand: 'Dell Latitude',
@@ -368,8 +537,11 @@
           screen: '14" FHD Display',
           price: 499,
           condition: 'excellent',
+          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=Dell+Latitude+5490'],
           imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=Dell+Latitude+5490',
-          description: 'Uzticams Dell biznesa klēpjdators'
+          description: 'Uzticams Dell biznesa klēpjdators',
+          visualRating: 8,
+          technicalRating: 9
         },
         {
           brand: 'HP EliteBook',
@@ -380,8 +552,11 @@
           screen: '14" FHD Display',
           price: 449,
           condition: 'very-good',
-          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=HP+EliteBook+840',
-          description: 'Kompakts un jaudīgs HP klēpjdators'
+          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=HP+EliteBook+840'],
+          imageUrl: 'https://via.placeholder.com/800x600/eef1f5/233259?text=HP+EliteBook+840',
+          description: 'Kompakts un jaudīgs HP klēpjdators',
+          visualRating: 7,
+          technicalRating: 8
         },
         {
           brand: 'Lenovo ThinkPad',
@@ -392,11 +567,24 @@
           screen: '14" FHD Touch',
           price: 829,
           condition: 'excellent',
+          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+X1+Carbon'],
           imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+X1+Carbon',
-          description: 'Premium ultrabook ar skārienekrānu'
+          description: 'Premium ultrabook ar skārienekrānu',
+          visualRating: 10,
+          technicalRating: 10
         }
       ];
     }
+
+    // Gallery state
+    let currentImageIndex = 0;
+    let zoomLevel = 1;
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let translateX = 0;
+    let translateY = 0;
+    let currentLaptop = null;
 
     // Condition labels in Latvian
     const conditionLabels = {
@@ -426,11 +614,48 @@
         return;
       }
 
+      currentLaptop = laptop;
+      const images = laptop.images || [laptop.imageUrl];
+      const visualRating = laptop.visualRating || 0;
+      const technicalRating = laptop.technicalRating || 0;
+
+      // Generate stars for ratings
+      const getStars = (rating) => {
+        const fullStars = Math.floor(rating);
+        const halfStar = rating % 1 >= 0.5 ? 1 : 0;
+        const emptyStars = 10 - fullStars - halfStar;
+        return '★'.repeat(fullStars) + (halfStar ? '½' : '') + '☆'.repeat(emptyStars);
+      };
+
+      const thumbnailsHTML = images.length > 1 ? `
+        <div class="thumbnails" id="thumbnails">
+          ${images.map((src, index) => `
+            <img src="${src}" alt="Thumbnail ${index + 1}" class="thumbnail${index === 0 ? ' active' : ''}" onclick="selectImage(${index})">
+          `).join('')}
+        </div>
+      ` : '';
+
       container.innerHTML = `
         <div class="detail-card">
           <div class="detail-grid">
             <div class="detail-image-section">
-              <img class="detail-img" src="${laptop.imageUrl}" alt="${laptop.brand} ${laptop.model}">
+              <div class="image-gallery">
+                <div class="main-image-container" id="imageContainer">
+                  <img id="mainImage" class="main-image" src="${images[0]}" alt="${laptop.brand} ${laptop.model}">
+                  ${images.length > 1 ? `
+                    <button class="image-nav-btn prev" onclick="prevImage()" id="prevImageBtn">‹</button>
+                    <button class="image-nav-btn next" onclick="nextImage()" id="nextImageBtn">›</button>
+                    <div class="image-counter" id="imageCounter">1 / ${images.length}</div>
+                  ` : ''}
+                  <div class="zoom-controls">
+                    <button class="zoom-btn" onclick="zoomOut()">−</button>
+                    <div class="zoom-level" id="zoomLevel">100%</div>
+                    <button class="zoom-btn" onclick="zoomIn()">+</button>
+                    <button class="zoom-btn" onclick="resetZoom()" title="Reset">↻</button>
+                  </div>
+                </div>
+                ${thumbnailsHTML}
+              </div>
               <span class="condition-badge condition-${laptop.condition}">${conditionLabels[laptop.condition] || laptop.condition}</span>
             </div>
 
@@ -439,6 +664,21 @@
               <h1 class="detail-model">${laptop.model}</h1>
               <div class="detail-price">$${laptop.price}</div>
               <p class="detail-description">${laptop.description}</p>
+
+              ${visualRating > 0 || technicalRating > 0 ? `
+                <div class="ratings-section">
+                  <div class="rating-box">
+                    <div class="rating-label">Vizuālais Stāvoklis</div>
+                    <div class="rating-score">${visualRating}<span>/10</span></div>
+                    <div class="rating-stars">${getStars(visualRating)}</div>
+                  </div>
+                  <div class="rating-box">
+                    <div class="rating-label">Tehniskais Stāvoklis</div>
+                    <div class="rating-score">${technicalRating}<span>/10</span></div>
+                    <div class="rating-stars">${getStars(technicalRating)}</div>
+                  </div>
+                </div>
+              ` : ''}
 
               <div class="specs-section">
                 <h3 class="specs-title">Specifikācijas</h3>
@@ -479,6 +719,191 @@
           </div>
         </div>
       `;
+
+      // Initialize gallery controls
+      initializeGallery();
+    }
+
+    // Gallery Functions
+    function initializeGallery() {
+      const imageContainer = document.getElementById('imageContainer');
+      const mainImage = document.getElementById('mainImage');
+
+      if (!imageContainer || !mainImage) return;
+
+      // Mouse wheel zoom
+      imageContainer.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        if (e.deltaY < 0) {
+          zoomLevel = Math.min(zoomLevel + 0.1, 5);
+        } else {
+          zoomLevel = Math.max(zoomLevel - 0.1, 0.25);
+        }
+        updateTransform();
+        updateZoomDisplay();
+      });
+
+      // Drag to pan
+      mainImage.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX - translateX;
+        startY = e.clientY - translateY;
+        imageContainer.style.cursor = 'grabbing';
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+        updateTransform();
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+        if (imageContainer) imageContainer.style.cursor = 'move';
+      });
+
+      // Touch support
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let lastTouchDistance = 0;
+
+      mainImage.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          isDragging = true;
+          touchStartX = e.touches[0].clientX - translateX;
+          touchStartY = e.touches[0].clientY - translateY;
+        } else if (e.touches.length === 2) {
+          isDragging = false;
+          const distance = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          lastTouchDistance = distance;
+        }
+      });
+
+      mainImage.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        if (e.touches.length === 1 && isDragging) {
+          translateX = e.touches[0].clientX - touchStartX;
+          translateY = e.touches[0].clientY - touchStartY;
+          updateTransform();
+        } else if (e.touches.length === 2) {
+          const distance = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          if (lastTouchDistance > 0) {
+            const delta = distance - lastTouchDistance;
+            zoomLevel = Math.max(0.25, Math.min(5, zoomLevel + delta * 0.01));
+            updateTransform();
+            updateZoomDisplay();
+          }
+          lastTouchDistance = distance;
+        }
+      });
+
+      mainImage.addEventListener('touchend', () => {
+        isDragging = false;
+        lastTouchDistance = 0;
+      });
+
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        const images = currentLaptop?.images || [currentLaptop?.imageUrl];
+        if (images.length <= 1) return;
+
+        if (e.key === 'ArrowLeft') prevImage();
+        if (e.key === 'ArrowRight') nextImage();
+      });
+    }
+
+    function updateTransform() {
+      const mainImage = document.getElementById('mainImage');
+      if (mainImage) {
+        mainImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${zoomLevel})`;
+      }
+    }
+
+    function updateZoomDisplay() {
+      const zoomLevelEl = document.getElementById('zoomLevel');
+      if (zoomLevelEl) {
+        zoomLevelEl.textContent = `${Math.round(zoomLevel * 100)}%`;
+      }
+    }
+
+    function zoomIn() {
+      zoomLevel = Math.min(zoomLevel + 0.25, 5);
+      updateTransform();
+      updateZoomDisplay();
+    }
+
+    function zoomOut() {
+      zoomLevel = Math.max(zoomLevel - 0.25, 0.25);
+      updateTransform();
+      updateZoomDisplay();
+    }
+
+    function resetZoom() {
+      zoomLevel = 1;
+      translateX = 0;
+      translateY = 0;
+      updateTransform();
+      updateZoomDisplay();
+    }
+
+    function selectImage(index) {
+      const images = currentLaptop?.images || [currentLaptop?.imageUrl];
+      currentImageIndex = index;
+      const mainImage = document.getElementById('mainImage');
+      if (mainImage) {
+        mainImage.src = images[index];
+      }
+
+      // Reset zoom and pan
+      resetZoom();
+
+      // Update thumbnails
+      const thumbnails = document.querySelectorAll('.thumbnail');
+      thumbnails.forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === index);
+      });
+
+      // Update counter and buttons
+      updateImageCounter();
+      updateNavButtons();
+    }
+
+    function prevImage() {
+      const images = currentLaptop?.images || [currentLaptop?.imageUrl];
+      if (currentImageIndex > 0) {
+        selectImage(currentImageIndex - 1);
+      }
+    }
+
+    function nextImage() {
+      const images = currentLaptop?.images || [currentLaptop?.imageUrl];
+      if (currentImageIndex < images.length - 1) {
+        selectImage(currentImageIndex + 1);
+      }
+    }
+
+    function updateImageCounter() {
+      const images = currentLaptop?.images || [currentLaptop?.imageUrl];
+      const counter = document.getElementById('imageCounter');
+      if (counter) {
+        counter.textContent = `${currentImageIndex + 1} / ${images.length}`;
+      }
+    }
+
+    function updateNavButtons() {
+      const images = currentLaptop?.images || [currentLaptop?.imageUrl];
+      const prevBtn = document.getElementById('prevImageBtn');
+      const nextBtn = document.getElementById('nextImageBtn');
+
+      if (prevBtn) prevBtn.disabled = currentImageIndex === 0;
+      if (nextBtn) nextBtn.disabled = currentImageIndex === images.length - 1;
     }
 
     // Initialize

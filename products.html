@@ -315,8 +315,11 @@
           screen: '14" FHD Display',
           price: 549,
           condition: 'excellent',
+          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+T490+Front', 'https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+T490+Side', 'https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+T490+Back'],
           imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+T490',
-          description: 'Profesionāls biznesa klēpjdators ar izcilu veiktspēju'
+          description: 'Profesionāls biznesa klēpjdators ar izcilu veiktspēju',
+          visualRating: 9,
+          technicalRating: 9
         },
         {
           brand: 'Dell Latitude',
@@ -327,8 +330,11 @@
           screen: '14" FHD Display',
           price: 499,
           condition: 'excellent',
+          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=Dell+Latitude+5490'],
           imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=Dell+Latitude+5490',
-          description: 'Uzticams Dell biznesa klēpjdators'
+          description: 'Uzticams Dell biznesa klēpjdators',
+          visualRating: 8,
+          technicalRating: 9
         },
         {
           brand: 'HP EliteBook',
@@ -339,8 +345,11 @@
           screen: '14" FHD Display',
           price: 449,
           condition: 'very-good',
-          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=HP+EliteBook+840',
-          description: 'Kompakts un jaudīgs HP klēpjdators'
+          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=HP+EliteBook+840'],
+          imageUrl: 'https://via.placeholder.com/800x600/eef1f5/233259?text=HP+EliteBook+840',
+          description: 'Kompakts un jaudīgs HP klēpjdators',
+          visualRating: 7,
+          technicalRating: 8
         },
         {
           brand: 'Lenovo ThinkPad',
@@ -351,8 +360,11 @@
           screen: '14" FHD Touch',
           price: 829,
           condition: 'excellent',
+          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+X1+Carbon'],
           imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+X1+Carbon',
-          description: 'Premium ultrabook ar skārienekrānu'
+          description: 'Premium ultrabook ar skārienekrānu',
+          visualRating: 10,
+          technicalRating: 10
         }
       ];
     }
@@ -382,9 +394,11 @@
         return;
       }
 
-      grid.innerHTML = filteredLaptops.map((laptop, index) => `
+      grid.innerHTML = filteredLaptops.map((laptop, index) => {
+        const displayImage = (laptop.images && laptop.images.length > 0) ? laptop.images[0] : laptop.imageUrl;
+        return `
         <div class="product-card" onclick="viewLaptop(${laptops.indexOf(laptop)})">
-          <img class="product-img" src="${laptop.imageUrl}" alt="${laptop.brand} ${laptop.model}">
+          <img class="product-img" src="${displayImage}" alt="${laptop.brand} ${laptop.model}">
           <div class="product-info">
             <div class="product-brand">${laptop.brand}</div>
             <div class="product-model">${laptop.model}</div>
@@ -398,7 +412,8 @@
             <button class="view-btn">Apskatīt Detaļas</button>
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
     }
 
     function viewLaptop(id) {

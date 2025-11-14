@@ -309,6 +309,115 @@
       background: #c82333;
     }
 
+    /* Image Upload Styles */
+    .upload-area {
+      border: 2px dashed #b3bfcf;
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 15px;
+      background: #f8f9fa;
+    }
+    .upload-area:hover {
+      border-color: #233259;
+      background: #eef1f5;
+    }
+    .upload-area.dragover {
+      border-color: #233259;
+      background: #eef1f5;
+    }
+    .upload-hint {
+      color: #5a6b7d;
+      font-size: 0.9rem;
+      margin-top: 8px;
+    }
+    #imageInput {
+      display: none;
+    }
+    .image-previews {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+    .image-preview {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 2px solid #b3bfcf;
+    }
+    .image-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .remove-image {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: #dc3545;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .remove-image:hover {
+      background: #c82333;
+    }
+
+    /* Rating Styles */
+    .rating-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    .rating-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .rating-slider {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #e8ecf0;
+      outline: none;
+      -webkit-appearance: none;
+    }
+    .rating-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #233259;
+      cursor: pointer;
+    }
+    .rating-slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #233259;
+      cursor: pointer;
+      border: none;
+    }
+    .rating-value {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #233259;
+      margin-top: 8px;
+      text-align: center;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .login-card, .admin-panel {
@@ -443,8 +552,35 @@
         </div>
 
         <div class="admin-form-group">
-          <label class="form-label">Attēla URL</label>
-          <input type="text" name="imageUrl" class="form-input" required>
+          <label class="form-label">Attēli (Vairāki)</label>
+          <div class="upload-area" id="uploadArea">
+            <div>📸 Noklikšķiniet vai ievelciet attēlus šeit</div>
+            <div class="upload-hint">JPG, PNG, GIF (vairākus attēlus)</div>
+          </div>
+          <input type="file" id="imageInput" multiple accept="image/*">
+          <div class="image-previews" id="imagePreviews"></div>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="form-label">Vai Imgur Saite</label>
+          <input type="text" id="imgurLink" class="form-input" placeholder="https://imgur.com/a/... vai atsevišķs attēls">
+          <button type="button" class="add-laptop-btn" style="margin-top: 10px; padding: 8px 20px; font-size: 0.9rem;" onclick="loadImgurImagesAdmin()">Ielādēt no Imgur</button>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="form-label">Vērtējumi</label>
+          <div class="rating-group">
+            <div class="rating-item">
+              <label style="font-size: 0.9rem; color: #5a6b7d; margin-bottom: 8px;">Vizuālais Stāvoklis</label>
+              <input type="range" id="visualRating" name="visualRating" min="1" max="10" value="7" class="rating-slider">
+              <div class="rating-value"><span id="visualRatingValue">7</span> / 10</div>
+            </div>
+            <div class="rating-item">
+              <label style="font-size: 0.9rem; color: #5a6b7d; margin-bottom: 8px;">Tehniskais Stāvoklis</label>
+              <input type="range" id="technicalRating" name="technicalRating" min="1" max="10" value="8" class="rating-slider">
+              <div class="rating-value"><span id="technicalRatingValue">8</span> / 10</div>
+            </div>
+          </div>
         </div>
 
         <div class="admin-form-group">
@@ -467,10 +603,117 @@
     const ADMIN_USERNAME = 'admin';
     const ADMIN_PASSWORD = 'admin123';
 
+    // Global variable to store uploaded images
+    let uploadedImages = [];
+
     // Check if already logged in
     if (localStorage.getItem('adminLoggedIn') === 'true') {
       showAdminPanel();
     }
+
+    // Image Upload Handlers
+    const uploadArea = document.getElementById('uploadArea');
+    const imageInput = document.getElementById('imageInput');
+    const imagePreviews = document.getElementById('imagePreviews');
+
+    uploadArea.addEventListener('click', () => {
+      imageInput.click();
+    });
+
+    imageInput.addEventListener('change', (e) => {
+      handleImageFiles(e.target.files);
+    });
+
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      handleImageFiles(e.dataTransfer.files);
+    });
+
+    function handleImageFiles(files) {
+      const fileArray = Array.from(files);
+      const imageFiles = fileArray.filter(file => file.type.startsWith('image/'));
+
+      imageFiles.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          uploadedImages.push(e.target.result);
+          updateImagePreviews();
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function updateImagePreviews() {
+      imagePreviews.innerHTML = uploadedImages.map((src, index) => `
+        <div class="image-preview">
+          <img src="${src}" alt="Preview ${index + 1}">
+          <button type="button" class="remove-image" onclick="removeImage(${index})">×</button>
+        </div>
+      `).join('');
+    }
+
+    function removeImage(index) {
+      uploadedImages.splice(index, 1);
+      updateImagePreviews();
+    }
+
+    // Load Images from Imgur
+    function loadImgurImagesAdmin() {
+      const imgurLink = document.getElementById('imgurLink').value.trim();
+
+      if (!imgurLink) {
+        alert('Lūdzu, ievadiet Imgur saiti');
+        return;
+      }
+
+      try {
+        // Extract image ID from URL
+        let imageId = '';
+
+        if (imgurLink.includes('/a/') || imgurLink.includes('/gallery/')) {
+          alert('Imgur albums prasa API atslēgu. Lūdzu, augšupielādējiet attēlus tieši vai izmantojiet atsevišķu Imgur attēla saiti.');
+          return;
+        } else if (imgurLink.includes('imgur.com/')) {
+          imageId = imgurLink.split('imgur.com/')[1].split(/[./?]/)[0];
+          const imageUrl = `https://i.imgur.com/${imageId}.jpg`;
+          uploadedImages.push(imageUrl);
+          updateImagePreviews();
+          document.getElementById('imgurLink').value = '';
+        } else if (imgurLink.includes('i.imgur.com/')) {
+          uploadedImages.push(imgurLink);
+          updateImagePreviews();
+          document.getElementById('imgurLink').value = '';
+        } else {
+          alert('Nederīga Imgur saite');
+        }
+      } catch (error) {
+        alert('Kļūda ielādējot no Imgur: ' + error.message);
+      }
+    }
+
+    // Rating Sliders
+    const visualRating = document.getElementById('visualRating');
+    const technicalRating = document.getElementById('technicalRating');
+    const visualRatingValue = document.getElementById('visualRatingValue');
+    const technicalRatingValue = document.getElementById('technicalRatingValue');
+
+    visualRating.addEventListener('input', (e) => {
+      visualRatingValue.textContent = e.target.value;
+    });
+
+    technicalRating.addEventListener('input', (e) => {
+      technicalRatingValue.textContent = e.target.value;
+    });
 
     // Login form handler
     document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -530,8 +773,11 @@
           screen: '14" FHD Display',
           price: 549,
           condition: 'excellent',
+          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+T490+Front', 'https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+T490+Side', 'https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+T490+Back'],
           imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+T490',
-          description: 'Profesionāls biznesa klēpjdators ar izcilu veiktspēju'
+          description: 'Profesionāls biznesa klēpjdators ar izcilu veiktspēju',
+          visualRating: 9,
+          technicalRating: 9
         },
         {
           brand: 'Dell Latitude',
@@ -542,8 +788,11 @@
           screen: '14" FHD Display',
           price: 499,
           condition: 'excellent',
+          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=Dell+Latitude+5490'],
           imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=Dell+Latitude+5490',
-          description: 'Uzticams Dell biznesa klēpjdators'
+          description: 'Uzticams Dell biznesa klēpjdators',
+          visualRating: 8,
+          technicalRating: 9
         },
         {
           brand: 'HP EliteBook',
@@ -554,8 +803,11 @@
           screen: '14" FHD Display',
           price: 449,
           condition: 'very-good',
-          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=HP+EliteBook+840',
-          description: 'Kompakts un jaudīgs HP klēpjdators'
+          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=HP+EliteBook+840'],
+          imageUrl: 'https://via.placeholder.com/800x600/eef1f5/233259?text=HP+EliteBook+840',
+          description: 'Kompakts un jaudīgs HP klēpjdators',
+          visualRating: 7,
+          technicalRating: 8
         },
         {
           brand: 'Lenovo ThinkPad',
@@ -566,8 +818,11 @@
           screen: '14" FHD Touch',
           price: 829,
           condition: 'excellent',
+          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+X1+Carbon'],
           imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+X1+Carbon',
-          description: 'Premium ultrabook ar skārienekrānu'
+          description: 'Premium ultrabook ar skārienekrānu',
+          visualRating: 10,
+          technicalRating: 10
         }
       ];
     }
@@ -575,6 +830,11 @@
     // Add laptop form handler
     document.getElementById('addLaptopForm').addEventListener('submit', function(e) {
       e.preventDefault();
+
+      if (uploadedImages.length === 0) {
+        alert('Lūdzu, pievienojiet vismaz vienu attēlu!');
+        return;
+      }
 
       const formData = new FormData(this);
       const newLaptop = {
@@ -586,8 +846,11 @@
         screen: formData.get('screen'),
         price: parseInt(formData.get('price')),
         condition: formData.get('condition'),
-        imageUrl: formData.get('imageUrl'),
-        description: formData.get('description')
+        images: [...uploadedImages],
+        imageUrl: uploadedImages[0], // First image as main
+        description: formData.get('description'),
+        visualRating: parseInt(formData.get('visualRating')),
+        technicalRating: parseInt(formData.get('technicalRating'))
       };
 
       let laptops = JSON.parse(localStorage.getItem('laptops')) || getDefaultLaptops();
@@ -596,6 +859,12 @@
 
       alert('Klēpjdators veiksmīgi pievienots!');
       this.reset();
+      uploadedImages = [];
+      updateImagePreviews();
+      visualRatingValue.textContent = '7';
+      technicalRatingValue.textContent = '8';
+      visualRating.value = 7;
+      technicalRating.value = 8;
       loadLaptopsList();
     });
 
@@ -614,6 +883,7 @@
           <div class="laptop-item-info">
             <div class="laptop-item-name">${laptop.brand} ${laptop.model}</div>
             <div class="laptop-item-price">$${laptop.price} • ${laptop.processor} • ${laptop.ram}</div>
+            <div class="laptop-item-price" style="margin-top: 5px;">📸 ${laptop.images ? laptop.images.length : 1} attēli • Vizuāls: ${laptop.visualRating || 'N/A'}/10 • Tehnisks: ${laptop.technicalRating || 'N/A'}/10</div>
           </div>
           <button class="delete-btn" onclick="deleteLaptop(${index})">Dzēst</button>
         </div>
