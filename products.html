@@ -303,69 +303,25 @@
   </footer>
 
   <script>
-    // Get default laptops
-    function getDefaultLaptops() {
-      return [
-        {
-          brand: 'Lenovo ThinkPad',
-          model: 'ThinkPad T490',
-          processor: 'Intel Core i7',
-          ram: '16GB RAM',
-          storage: '512GB SSD',
-          screen: '14" FHD Display',
-          price: 549,
-          condition: 'excellent',
-          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+T490',
-          description: 'Profesionāls biznesa klēpjdators ar izcilu veiktspēju'
-        },
-        {
-          brand: 'Dell Latitude',
-          model: 'Latitude 5490',
-          processor: 'Intel Core i7',
-          ram: '16GB RAM',
-          storage: '512GB SSD',
-          screen: '14" FHD Display',
-          price: 499,
-          condition: 'excellent',
-          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=Dell+Latitude+5490',
-          description: 'Uzticams Dell biznesa klēpjdators'
-        },
-        {
-          brand: 'HP EliteBook',
-          model: 'EliteBook 840 G6',
-          processor: 'Intel Core i5',
-          ram: '8GB RAM',
-          storage: '256GB SSD',
-          screen: '14" FHD Display',
-          price: 449,
-          condition: 'very-good',
-          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=HP+EliteBook+840',
-          description: 'Kompakts un jaudīgs HP klēpjdators'
-        },
-        {
-          brand: 'Lenovo ThinkPad',
-          model: 'X1 Carbon Gen 7',
-          processor: 'Intel Core i7',
-          ram: '16GB RAM',
-          storage: '512GB SSD',
-          screen: '14" FHD Touch',
-          price: 829,
-          condition: 'excellent',
-          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+X1+Carbon',
-          description: 'Premium ultrabook ar skārienekrānu'
+    let laptops = [];
+    let filteredLaptops = [];
+
+    // Fetch laptops from API
+    async function fetchLaptops() {
+      try {
+        const response = await fetch('/api/laptops.php');
+        const result = await response.json();
+
+        if (result.success) {
+          laptops = result.laptops;
+          applyFilters();
+        } else {
+          console.error('Failed to fetch laptops:', result.error);
         }
-      ];
+      } catch (error) {
+        console.error('Error fetching laptops:', error);
+      }
     }
-
-    // Load laptops from localStorage or use defaults
-    let laptops = JSON.parse(localStorage.getItem('laptops')) || getDefaultLaptops();
-
-    // Save defaults if none exist
-    if (!localStorage.getItem('laptops')) {
-      localStorage.setItem('laptops', JSON.stringify(laptops));
-    }
-
-    let filteredLaptops = [...laptops];
 
     // Condition labels in Latvian
     const conditionLabels = {
@@ -382,9 +338,11 @@
         return;
       }
 
-      grid.innerHTML = filteredLaptops.map((laptop, index) => `
+      grid.innerHTML = filteredLaptops.map((laptop, index) => {
+        const displayImage = (laptop.images && laptop.images.length > 0) ? laptop.images[0] : laptop.imageUrl;
+        return `
         <div class="product-card" onclick="viewLaptop(${laptops.indexOf(laptop)})">
-          <img class="product-img" src="${laptop.imageUrl}" alt="${laptop.brand} ${laptop.model}">
+          <img class="product-img" src="${displayImage}" alt="${laptop.brand} ${laptop.model}">
           <div class="product-info">
             <div class="product-brand">${laptop.brand}</div>
             <div class="product-model">${laptop.model}</div>
@@ -398,7 +356,8 @@
             <button class="view-btn">Apskatīt Detaļas</button>
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
     }
 
     function viewLaptop(id) {
@@ -435,13 +394,12 @@
     document.getElementById('sortFilter').addEventListener('change', applyFilters);
 
     // Initial render
-    applyFilters();
+    fetchLaptops();
 
     // Reload laptops when page becomes visible
     document.addEventListener('visibilitychange', function() {
       if (!document.hidden) {
-        laptops = JSON.parse(localStorage.getItem('laptops')) || getDefaultLaptops();
-        applyFilters();
+        fetchLaptops();
       }
     });
   </script>
