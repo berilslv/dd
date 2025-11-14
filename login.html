@@ -264,6 +264,40 @@
     .add-laptop-btn:hover {
       background: #218838;
     }
+    .cancel-edit-btn {
+      background: #6c757d;
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.14s;
+      margin-top: 10px;
+      margin-left: 10px;
+    }
+    .cancel-edit-btn:hover {
+      background: #545b62;
+    }
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .form-title {
+      color: #233259;
+      margin: 0;
+    }
+    .editing-badge {
+      background: #007bff;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
 
     .laptops-list {
       margin-top: 30px;
@@ -293,6 +327,24 @@
     .laptop-item-price {
       color: #5a6b7d;
       font-size: 0.9rem;
+    }
+    .laptop-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .edit-btn {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.14s;
+    }
+    .edit-btn:hover {
+      background: #0056b3;
     }
     .delete-btn {
       background: #dc3545;
@@ -504,7 +556,10 @@
         <button class="logout-btn" onclick="logout()">Iziet</button>
       </div>
 
-      <h2 style="color: #233259; margin-bottom: 20px;">Pievienot Jaunu Klēpjdatoru</h2>
+      <div class="form-header">
+        <h2 class="form-title" id="formTitle">Pievienot Jaunu Klēpjdatoru</h2>
+        <span class="editing-badge" id="editingBadge" style="display: none;">Rediģēšanas Režīms</span>
+      </div>
 
       <form id="addLaptopForm">
         <div class="admin-form-group">
@@ -588,7 +643,10 @@
           <textarea name="description" class="form-input" style="min-height: 80px;" required></textarea>
         </div>
 
-        <button type="submit" class="add-laptop-btn">Pievienot Klēpjdatoru</button>
+        <div>
+          <button type="submit" class="add-laptop-btn" id="submitBtn">Pievienot Klēpjdatoru</button>
+          <button type="button" class="cancel-edit-btn" id="cancelEditBtn" style="display: none;" onclick="cancelEdit()">Atcelt</button>
+        </div>
       </form>
 
       <div class="laptops-list">
@@ -605,6 +663,9 @@
 
     // Global variable to store uploaded images
     let uploadedImages = [];
+
+    // Track if we're editing a laptop
+    let editingIndex = null;
 
     // Check if already logged in
     if (localStorage.getItem('adminLoggedIn') === 'true') {
@@ -837,7 +898,7 @@
       }
 
       const formData = new FormData(this);
-      const newLaptop = {
+      const laptopData = {
         brand: formData.get('brand'),
         model: formData.get('model'),
         processor: formData.get('processor'),
@@ -854,17 +915,27 @@
       };
 
       let laptops = JSON.parse(localStorage.getItem('laptops')) || getDefaultLaptops();
-      laptops.push(newLaptop);
-      localStorage.setItem('laptops', JSON.stringify(laptops));
 
-      alert('Klēpjdators veiksmīgi pievienots!');
-      this.reset();
-      uploadedImages = [];
-      updateImagePreviews();
-      visualRatingValue.textContent = '7';
-      technicalRatingValue.textContent = '8';
-      visualRating.value = 7;
-      technicalRating.value = 8;
+      if (editingIndex !== null) {
+        // Update existing laptop
+        laptops[editingIndex] = laptopData;
+        localStorage.setItem('laptops', JSON.stringify(laptops));
+        alert('Klēpjdators veiksmīgi atjaunināts!');
+        cancelEdit();
+      } else {
+        // Add new laptop
+        laptops.push(laptopData);
+        localStorage.setItem('laptops', JSON.stringify(laptops));
+        alert('Klēpjdators veiksmīgi pievienots!');
+        this.reset();
+        uploadedImages = [];
+        updateImagePreviews();
+        visualRatingValue.textContent = '7';
+        technicalRatingValue.textContent = '8';
+        visualRating.value = 7;
+        technicalRating.value = 8;
+      }
+
       loadLaptopsList();
     });
 
@@ -885,7 +956,10 @@
             <div class="laptop-item-price">$${laptop.price} • ${laptop.processor} • ${laptop.ram}</div>
             <div class="laptop-item-price" style="margin-top: 5px;">📸 ${laptop.images ? laptop.images.length : 1} attēli • Vizuāls: ${laptop.visualRating || 'N/A'}/10 • Tehnisks: ${laptop.technicalRating || 'N/A'}/10</div>
           </div>
-          <button class="delete-btn" onclick="deleteLaptop(${index})">Dzēst</button>
+          <div class="laptop-actions">
+            <button class="edit-btn" onclick="editLaptop(${index})">Rediģēt</button>
+            <button class="delete-btn" onclick="deleteLaptop(${index})">Dzēst</button>
+          </div>
         </div>
       `).join('');
     }
@@ -901,7 +975,79 @@
       localStorage.setItem('laptops', JSON.stringify(laptops));
 
       alert('Klēpjdators dzēsts!');
+
+      // If we were editing this laptop, cancel edit
+      if (editingIndex === index) {
+        cancelEdit();
+      } else if (editingIndex !== null && editingIndex > index) {
+        // Adjust editing index if needed
+        editingIndex--;
+      }
+
       loadLaptopsList();
+    }
+
+    // Edit laptop
+    function editLaptop(index) {
+      const laptops = JSON.parse(localStorage.getItem('laptops')) || getDefaultLaptops();
+      const laptop = laptops[index];
+
+      // Set editing mode
+      editingIndex = index;
+
+      // Populate form fields
+      document.querySelector('input[name="brand"]').value = laptop.brand;
+      document.querySelector('input[name="model"]').value = laptop.model;
+      document.querySelector('input[name="processor"]').value = laptop.processor;
+      document.querySelector('input[name="ram"]').value = laptop.ram;
+      document.querySelector('input[name="storage"]').value = laptop.storage;
+      document.querySelector('input[name="screen"]').value = laptop.screen;
+      document.querySelector('input[name="price"]').value = laptop.price;
+      document.querySelector('select[name="condition"]').value = laptop.condition;
+      document.querySelector('textarea[name="description"]').value = laptop.description;
+
+      // Load images
+      uploadedImages = laptop.images ? [...laptop.images] : [laptop.imageUrl];
+      updateImagePreviews();
+
+      // Load ratings
+      const vRating = laptop.visualRating || 7;
+      const tRating = laptop.technicalRating || 8;
+      visualRating.value = vRating;
+      technicalRating.value = tRating;
+      visualRatingValue.textContent = vRating;
+      technicalRatingValue.textContent = tRating;
+
+      // Update UI
+      document.getElementById('formTitle').textContent = 'Rediģēt Klēpjdatoru';
+      document.getElementById('editingBadge').style.display = 'inline-block';
+      document.getElementById('submitBtn').textContent = 'Saglabāt Izmaiņas';
+      document.getElementById('cancelEditBtn').style.display = 'inline-block';
+
+      // Scroll to form
+      document.getElementById('addLaptopForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Cancel edit
+    function cancelEdit() {
+      editingIndex = null;
+
+      // Reset form
+      document.getElementById('addLaptopForm').reset();
+      uploadedImages = [];
+      updateImagePreviews();
+
+      // Reset ratings
+      visualRatingValue.textContent = '7';
+      technicalRatingValue.textContent = '8';
+      visualRating.value = 7;
+      technicalRating.value = 8;
+
+      // Update UI
+      document.getElementById('formTitle').textContent = 'Pievienot Jaunu Klēpjdatoru';
+      document.getElementById('editingBadge').style.display = 'none';
+      document.getElementById('submitBtn').textContent = 'Pievienot Klēpjdatoru';
+      document.getElementById('cancelEditBtn').style.display = 'none';
     }
 
     // Initialize laptops if none exist
