@@ -510,72 +510,6 @@
   </footer>
 
   <script>
-    // Get default laptops
-    function getDefaultLaptops() {
-      return [
-        {
-          brand: 'Lenovo ThinkPad',
-          model: 'ThinkPad T490',
-          processor: 'Intel Core i7',
-          ram: '16GB RAM',
-          storage: '512GB SSD',
-          screen: '14" FHD Display',
-          price: 549,
-          condition: 'excellent',
-          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+T490+Front', 'https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+T490+Side', 'https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+T490+Back'],
-          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+T490',
-          description: 'Profesionāls biznesa klēpjdators ar izcilu veiktspēju',
-          visualRating: 9,
-          technicalRating: 9
-        },
-        {
-          brand: 'Dell Latitude',
-          model: 'Latitude 5490',
-          processor: 'Intel Core i7',
-          ram: '16GB RAM',
-          storage: '512GB SSD',
-          screen: '14" FHD Display',
-          price: 499,
-          condition: 'excellent',
-          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=Dell+Latitude+5490'],
-          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=Dell+Latitude+5490',
-          description: 'Uzticams Dell biznesa klēpjdators',
-          visualRating: 8,
-          technicalRating: 9
-        },
-        {
-          brand: 'HP EliteBook',
-          model: 'EliteBook 840 G6',
-          processor: 'Intel Core i5',
-          ram: '8GB RAM',
-          storage: '256GB SSD',
-          screen: '14" FHD Display',
-          price: 449,
-          condition: 'very-good',
-          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=HP+EliteBook+840'],
-          imageUrl: 'https://via.placeholder.com/800x600/eef1f5/233259?text=HP+EliteBook+840',
-          description: 'Kompakts un jaudīgs HP klēpjdators',
-          visualRating: 7,
-          technicalRating: 8
-        },
-        {
-          brand: 'Lenovo ThinkPad',
-          model: 'X1 Carbon Gen 7',
-          processor: 'Intel Core i7',
-          ram: '16GB RAM',
-          storage: '512GB SSD',
-          screen: '14" FHD Touch',
-          price: 829,
-          condition: 'excellent',
-          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+X1+Carbon'],
-          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+X1+Carbon',
-          description: 'Premium ultrabook ar skārienekrānu',
-          visualRating: 10,
-          technicalRating: 10
-        }
-      ];
-    }
-
     // Gallery state
     let currentImageIndex = 0;
     let zoomLevel = 1;
@@ -594,25 +528,34 @@
     };
 
     // Load laptop details
-    function loadLaptopDetails() {
+    async function loadLaptopDetails() {
       const urlParams = new URLSearchParams(window.location.search);
       const laptopId = parseInt(urlParams.get('id'));
 
-      const laptops = JSON.parse(localStorage.getItem('laptops')) || getDefaultLaptops();
-      const laptop = laptops[laptopId];
-
       const container = document.getElementById('laptopDetail');
 
-      if (!laptop) {
-        container.innerHTML = `
-          <div class="error-message">
-            <h2>Klēpjdators nav atrasts</h2>
-            <p>Diemžēl šis produkts vairs nav pieejams.</p>
-            <a href="products.html" class="buy-btn" style="display: inline-block; margin-top: 20px;">Atgriezties uz Veikalu</a>
-          </div>
-        `;
-        return;
-      }
+      try {
+        const response = await fetch('/api/laptops.php');
+        const result = await response.json();
+
+        if (!result.success) {
+          throw new Error(result.error || 'Failed to fetch laptops');
+        }
+
+        const laptops = result.laptops;
+        const laptop = laptops[laptopId];
+
+
+        if (!laptop) {
+          container.innerHTML = `
+            <div class="error-message">
+              <h2>Klēpjdators nav atrasts</h2>
+              <p>Diemžēl šis produkts vairs nav pieejams.</p>
+              <a href="products.html" class="buy-btn" style="display: inline-block; margin-top: 20px;">Atgriezties uz Veikalu</a>
+            </div>
+          `;
+          return;
+        }
 
       currentLaptop = laptop;
       const images = laptop.images || [laptop.imageUrl];
@@ -720,8 +663,18 @@
         </div>
       `;
 
-      // Initialize gallery controls
-      initializeGallery();
+        // Initialize gallery controls
+        initializeGallery();
+      } catch (error) {
+        console.error('Error loading laptop details:', error);
+        container.innerHTML = `
+          <div class="error-message">
+            <h2>Kļūda ielādējot datus</h2>
+            <p>Neizdevās ielādēt klēpjdatora informāciju. Lūdzu, mēģiniet vēlreiz.</p>
+            <a href="products.html" class="buy-btn" style="display: inline-block; margin-top: 20px;">Atgriezties uz Veikalu</a>
+          </div>
+        `;
+      }
     }
 
     // Gallery Functions

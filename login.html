@@ -657,20 +657,28 @@
   </div>
 
   <script>
-    // Default credentials (in production, use proper backend authentication)
-    const ADMIN_USERNAME = 'admin';
-    const ADMIN_PASSWORD = 'admin123';
-
     // Global variable to store uploaded images
     let uploadedImages = [];
 
-    // Track if we're editing a laptop
-    let editingIndex = null;
+    // Track if we're editing a laptop (now storing laptop ID instead of index)
+    let editingLaptopId = null;
+    let laptopsData = [];
 
-    // Check if already logged in
-    if (localStorage.getItem('adminLoggedIn') === 'true') {
-      showAdminPanel();
+    // Check if already logged in via API
+    async function checkSession() {
+      try {
+        const response = await fetch('/api/auth.php');
+        const result = await response.json();
+
+        if (result.success && result.loggedIn) {
+          showAdminPanel();
+        }
+      } catch (error) {
+        console.error('Error checking session:', error);
+      }
     }
+
+    checkSession();
 
     // Image Upload Handlers
     const uploadArea = document.getElementById('uploadArea');
@@ -777,19 +785,41 @@
     });
 
     // Login form handler
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
 
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
       const errorMessage = document.getElementById('errorMessage');
+      const submitBtn = this.querySelector('button[type="submit"]');
 
-      if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-        localStorage.setItem('adminLoggedIn', 'true');
-        errorMessage.classList.remove('show');
-        showAdminPanel();
-      } else {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Pieslēdzas...';
+
+      try {
+        const response = await fetch('/api/auth.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ username, password })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          errorMessage.classList.remove('show');
+          showAdminPanel();
+        } else {
+          errorMessage.classList.add('show');
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        errorMessage.textContent = 'Pieslēgšanās kļūda. Lūdzu, mēģiniet vēlreiz.';
         errorMessage.classList.add('show');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Ielogoties';
       }
     });
 
@@ -815,81 +845,22 @@
     }
 
     // Logout
-    function logout() {
-      localStorage.removeItem('adminLoggedIn');
+    async function logout() {
+      try {
+        await fetch('/api/auth.php', {
+          method: 'DELETE'
+        });
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+
       document.getElementById('loginCard').style.display = 'block';
       document.getElementById('adminPanel').classList.remove('show');
       document.getElementById('loginForm').reset();
     }
 
-    // Get default laptops
-    function getDefaultLaptops() {
-      return [
-        {
-          brand: 'Lenovo ThinkPad',
-          model: 'ThinkPad T490',
-          processor: 'Intel Core i7',
-          ram: '16GB RAM',
-          storage: '512GB SSD',
-          screen: '14" FHD Display',
-          price: 549,
-          condition: 'excellent',
-          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+T490+Front', 'https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+T490+Side', 'https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+T490+Back'],
-          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+T490',
-          description: 'Profesionāls biznesa klēpjdators ar izcilu veiktspēju',
-          visualRating: 9,
-          technicalRating: 9
-        },
-        {
-          brand: 'Dell Latitude',
-          model: 'Latitude 5490',
-          processor: 'Intel Core i7',
-          ram: '16GB RAM',
-          storage: '512GB SSD',
-          screen: '14" FHD Display',
-          price: 499,
-          condition: 'excellent',
-          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=Dell+Latitude+5490'],
-          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=Dell+Latitude+5490',
-          description: 'Uzticams Dell biznesa klēpjdators',
-          visualRating: 8,
-          technicalRating: 9
-        },
-        {
-          brand: 'HP EliteBook',
-          model: 'EliteBook 840 G6',
-          processor: 'Intel Core i5',
-          ram: '8GB RAM',
-          storage: '256GB SSD',
-          screen: '14" FHD Display',
-          price: 449,
-          condition: 'very-good',
-          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=HP+EliteBook+840'],
-          imageUrl: 'https://via.placeholder.com/800x600/eef1f5/233259?text=HP+EliteBook+840',
-          description: 'Kompakts un jaudīgs HP klēpjdators',
-          visualRating: 7,
-          technicalRating: 8
-        },
-        {
-          brand: 'Lenovo ThinkPad',
-          model: 'X1 Carbon Gen 7',
-          processor: 'Intel Core i7',
-          ram: '16GB RAM',
-          storage: '512GB SSD',
-          screen: '14" FHD Touch',
-          price: 829,
-          condition: 'excellent',
-          images: ['https://via.placeholder.com/800x600/eef1f5/233259?text=ThinkPad+X1+Carbon'],
-          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+X1+Carbon',
-          description: 'Premium ultrabook ar skārienekrānu',
-          visualRating: 10,
-          technicalRating: 10
-        }
-      ];
-    }
-
     // Add laptop form handler
-    document.getElementById('addLaptopForm').addEventListener('submit', function(e) {
+    document.getElementById('addLaptopForm').addEventListener('submit', async function(e) {
       e.preventDefault();
 
       if (uploadedImages.length === 0) {
@@ -908,92 +879,155 @@
         price: parseInt(formData.get('price')),
         condition: formData.get('condition'),
         images: [...uploadedImages],
-        imageUrl: uploadedImages[0], // First image as main
         description: formData.get('description'),
         visualRating: parseInt(formData.get('visualRating')),
         technicalRating: parseInt(formData.get('technicalRating'))
       };
 
-      let laptops = JSON.parse(localStorage.getItem('laptops')) || getDefaultLaptops();
+      const submitBtn = this.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = editingLaptopId !== null ? 'Saglabā...' : 'Pievieno...';
 
-      if (editingIndex !== null) {
-        // Update existing laptop
-        laptops[editingIndex] = laptopData;
-        localStorage.setItem('laptops', JSON.stringify(laptops));
-        alert('Klēpjdators veiksmīgi atjaunināts!');
-        cancelEdit();
-      } else {
-        // Add new laptop
-        laptops.push(laptopData);
-        localStorage.setItem('laptops', JSON.stringify(laptops));
-        alert('Klēpjdators veiksmīgi pievienots!');
-        this.reset();
-        uploadedImages = [];
-        updateImagePreviews();
-        visualRatingValue.textContent = '7';
-        technicalRatingValue.textContent = '8';
-        visualRating.value = 7;
-        technicalRating.value = 8;
+      try {
+        if (editingLaptopId !== null) {
+          // Update existing laptop
+          laptopData.id = editingLaptopId;
+          const response = await fetch('/api/laptops.php', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(laptopData)
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            alert('Klēpjdators veiksmīgi atjaunināts!');
+            cancelEdit();
+          } else {
+            alert('Kļūda: ' + result.error);
+          }
+        } else {
+          // Add new laptop
+          const response = await fetch('/api/laptops.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(laptopData)
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            alert('Klēpjdators veiksmīgi pievienots!');
+            this.reset();
+            uploadedImages = [];
+            updateImagePreviews();
+            visualRatingValue.textContent = '7';
+            technicalRatingValue.textContent = '8';
+            visualRating.value = 7;
+            technicalRating.value = 8;
+          } else {
+            alert('Kļūda: ' + result.error);
+          }
+        }
+
+        loadLaptopsList();
+      } catch (error) {
+        console.error('Error saving laptop:', error);
+        alert('Neizdevās saglabāt klēpjdatoru. Lūdzu, mēģiniet vēlreiz.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = editingLaptopId !== null ? 'Saglabāt Izmaiņas' : 'Pievienot Klēpjdatoru';
       }
-
-      loadLaptopsList();
     });
 
     // Load and display laptops list
-    function loadLaptopsList() {
-      const laptops = JSON.parse(localStorage.getItem('laptops')) || getDefaultLaptops();
+    async function loadLaptopsList() {
       const listContainer = document.getElementById('laptopsList');
 
-      if (laptops.length === 0) {
-        listContainer.innerHTML = '<p style="color: #5a6b7d;">Nav pievienotu klēpjdatoru.</p>';
-        return;
-      }
+      try {
+        const response = await fetch('/api/laptops.php');
+        const result = await response.json();
 
-      listContainer.innerHTML = laptops.map((laptop, index) => `
-        <div class="laptop-item">
-          <div class="laptop-item-info">
-            <div class="laptop-item-name">${laptop.brand} ${laptop.model}</div>
-            <div class="laptop-item-price">$${laptop.price} • ${laptop.processor} • ${laptop.ram}</div>
-            <div class="laptop-item-price" style="margin-top: 5px;">📸 ${laptop.images ? laptop.images.length : 1} attēli • Vizuāls: ${laptop.visualRating || 'N/A'}/10 • Tehnisks: ${laptop.technicalRating || 'N/A'}/10</div>
+        if (!result.success) {
+          throw new Error(result.error || 'Failed to fetch laptops');
+        }
+
+        laptopsData = result.laptops;
+
+        if (laptopsData.length === 0) {
+          listContainer.innerHTML = '<p style="color: #5a6b7d;">Nav pievienotu klēpjdatoru.</p>';
+          return;
+        }
+
+        listContainer.innerHTML = laptopsData.map((laptop) => `
+          <div class="laptop-item">
+            <div class="laptop-item-info">
+              <div class="laptop-item-name">${laptop.brand} ${laptop.model}</div>
+              <div class="laptop-item-price">$${laptop.price} • ${laptop.processor} • ${laptop.ram}</div>
+              <div class="laptop-item-price" style="margin-top: 5px;">📸 ${laptop.images ? laptop.images.length : 1} attēli • Vizuāls: ${laptop.visualRating || 'N/A'}/10 • Tehnisks: ${laptop.technicalRating || 'N/A'}/10</div>
+            </div>
+            <div class="laptop-actions">
+              <button class="edit-btn" onclick="editLaptop(${laptop.id})">Rediģēt</button>
+              <button class="delete-btn" onclick="deleteLaptop(${laptop.id})">Dzēst</button>
+            </div>
           </div>
-          <div class="laptop-actions">
-            <button class="edit-btn" onclick="editLaptop(${index})">Rediģēt</button>
-            <button class="delete-btn" onclick="deleteLaptop(${index})">Dzēst</button>
-          </div>
-        </div>
-      `).join('');
+        `).join('');
+      } catch (error) {
+        console.error('Error loading laptops:', error);
+        listContainer.innerHTML = '<p style="color: #dc3545;">Kļūda ielādējot klēpjdatorus.</p>';
+      }
     }
 
     // Delete laptop
-    function deleteLaptop(index) {
+    async function deleteLaptop(id) {
       if (!confirm('Vai tiešām vēlaties dzēst šo klēpjdatoru?')) {
         return;
       }
 
-      let laptops = JSON.parse(localStorage.getItem('laptops')) || getDefaultLaptops();
-      laptops.splice(index, 1);
-      localStorage.setItem('laptops', JSON.stringify(laptops));
+      try {
+        const response = await fetch('/api/laptops.php', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ id })
+        });
 
-      alert('Klēpjdators dzēsts!');
+        const result = await response.json();
 
-      // If we were editing this laptop, cancel edit
-      if (editingIndex === index) {
-        cancelEdit();
-      } else if (editingIndex !== null && editingIndex > index) {
-        // Adjust editing index if needed
-        editingIndex--;
+        if (result.success) {
+          alert('Klēpjdators dzēsts!');
+
+          // If we were editing this laptop, cancel edit
+          if (editingLaptopId === id) {
+            cancelEdit();
+          }
+
+          loadLaptopsList();
+        } else {
+          alert('Kļūda: ' + result.error);
+        }
+      } catch (error) {
+        console.error('Error deleting laptop:', error);
+        alert('Neizdevās dzēst klēpjdatoru. Lūdzu, mēģiniet vēlreiz.');
       }
-
-      loadLaptopsList();
     }
 
     // Edit laptop
-    function editLaptop(index) {
-      const laptops = JSON.parse(localStorage.getItem('laptops')) || getDefaultLaptops();
-      const laptop = laptops[index];
+    function editLaptop(id) {
+      const laptop = laptopsData.find(l => l.id === id);
+
+      if (!laptop) {
+        alert('Klēpjdators nav atrasts.');
+        return;
+      }
 
       // Set editing mode
-      editingIndex = index;
+      editingLaptopId = id;
 
       // Populate form fields
       document.querySelector('input[name="brand"]').value = laptop.brand;
@@ -1030,7 +1064,7 @@
 
     // Cancel edit
     function cancelEdit() {
-      editingIndex = null;
+      editingLaptopId = null;
 
       // Reset form
       document.getElementById('addLaptopForm').reset();
@@ -1048,11 +1082,6 @@
       document.getElementById('editingBadge').style.display = 'none';
       document.getElementById('submitBtn').textContent = 'Pievienot Klēpjdatoru';
       document.getElementById('cancelEditBtn').style.display = 'none';
-    }
-
-    // Initialize laptops if none exist
-    if (!localStorage.getItem('laptops')) {
-      localStorage.setItem('laptops', JSON.stringify(getDefaultLaptops()));
     }
   </script>
 </body>
