@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <title>Attēlu Galerija | LaptopHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:400,600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f4f5f7;
+      color: #222e36;
+    }
+
+    /* Navigation */
+    nav {
+      background: #233259;
+      padding: 16px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #fff;
+      text-decoration: none;
+    }
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 32px;
+      align-items: center;
+    }
+    .nav-menu a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .nav-menu a:hover {
+      opacity: 0.8;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #233259;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    /* Upload Section */
+    .upload-section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      margin-bottom: 30px;
+    }
+
+    .upload-area {
+      border: 2px dashed #b3bfcf;
+      border-radius: 8px;
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 20px;
+    }
+
+    .upload-area:hover {
+      border-color: #233259;
+      background: #f9fafb;
+    }
+
+    .upload-area.dragover {
+      border-color: #233259;
+      background: #eef1f5;
+    }
+
+    .upload-icon {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .upload-text {
+      font-size: 1.1rem;
+      color: #475067;
+      margin-bottom: 10px;
+    }
+
+    .upload-hint {
+      font-size: 0.9rem;
+      color: #8a95a3;
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    .imgur-input-container {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e5e9ed;
+    }
+
+    .imgur-label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #233259;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .imgur-input-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .imgur-input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid #b3bfcf;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .imgur-input:focus {
+      outline: none;
+      border-color: #233259;
+    }
+
+    .imgur-btn {
+      background: #233259;
+      color: #fff;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .imgur-btn:hover {
+      background: #425671;
+    }
+
+    /* Thumbnails */
+    .thumbnails {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .thumbnail {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .thumbnail:hover {
+      transform: scale(1.05);
+    }
+
+    .thumbnail.active {
+      border-color: #233259;
+      box-shadow: 0 4px 12px rgba(35, 50, 89, 0.3);
+    }
+
+    /* Image Viewer */
+    .viewer-section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      min-height: 500px;
+      position: relative;
+    }
+
+    .viewer-container {
+      position: relative;
+      width: 100%;
+      height: 600px;
+      overflow: hidden;
+      background: #2d3a4c;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: move;
+    }
+
+    .viewer-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: transform 0.1s ease-out;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .empty-viewer {
+      color: #8a95a3;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .control-btn {
+      background: #233259;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .control-btn:hover {
+      background: #425671;
+    }
+
+    .control-btn:disabled {
+      background: #b3bfcf;
+      cursor: not-allowed;
+    }
+
+    .nav-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .zoom-indicator {
+      background: #eef1f5;
+      color: #233259;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      min-width: 100px;
+      text-align: center;
+    }
+
+    .image-counter {
+      background: #eef1f5;
+      color: #233259;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    /* Footer */
+    footer {
+      background: #2d3a4c;
+      color: #d4dae1;
+      padding: 30px 20px;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .viewer-container {
+        height: 400px;
+      }
+
+      .controls {
+        gap: 10px;
+      }
+
+      .control-btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+      }
+
+      .nav-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+      }
+
+      .imgur-input-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">💼 LaptopHub</a>
+      <ul class="nav-menu">
+        <li><a href="index.html">Sākums</a></li>
+        <li><a href="products.html">Veikals</a></li>
+        <li><a href="about.html">Par Mums</a></li>
+        <li><a href="contact.html">Kontakti</a></li>
+        <li><a href="gallery.html">Galerija</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h1 class="page-title">Attēlu Galerija</h1>
+
+    <!-- Upload Section -->
+    <div class="upload-section">
+      <div class="upload-area" id="uploadArea">
+        <div class="upload-icon">📸</div>
+        <div class="upload-text">Noklikšķiniet vai ievelciet attēlus šeit</div>
+        <div class="upload-hint">Atbalsta: JPG, PNG, GIF (vairākus attēlus)</div>
+      </div>
+      <input type="file" id="fileInput" multiple accept="image/*">
+
+      <!-- Imgur Link Input -->
+      <div class="imgur-input-container">
+        <label class="imgur-label">Vai ielīmējiet Imgur saiti:</label>
+        <div class="imgur-input-group">
+          <input type="text" id="imgurInput" class="imgur-input" placeholder="https://imgur.com/a/... vai https://imgur.com/gallery/...">
+          <button class="imgur-btn" onclick="loadImgurImages()">Ielādēt</button>
+        </div>
+      </div>
+
+      <!-- Thumbnails -->
+      <div class="thumbnails" id="thumbnails"></div>
+    </div>
+
+    <!-- Viewer Section -->
+    <div class="viewer-section">
+      <div class="viewer-container" id="viewerContainer">
+        <div class="empty-viewer" id="emptyViewer">
+          Nav atlasītu attēlu<br>
+          <small>Augšupielādējiet vai ielīmējiet Imgur saiti</small>
+        </div>
+        <img id="viewerImage" class="viewer-image" style="display: none;" alt="Skatīt attēlu">
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <button class="control-btn nav-btn" onclick="prevImage()" id="prevBtn" disabled>‹</button>
+        <div class="image-counter" id="imageCounter">0 / 0</div>
+        <button class="control-btn nav-btn" onclick="nextImage()" id="nextBtn" disabled>›</button>
+
+        <button class="control-btn" onclick="zoomOut()">🔍−</button>
+        <div class="zoom-indicator" id="zoomIndicator">100%</div>
+        <button class="control-btn" onclick="zoomIn()">🔍+</button>
+
+        <button class="control-btn" onclick="resetZoom()">Atiestatīt</button>
+        <button class="control-btn" onclick="clearGallery()">Notīrīt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2024 LaptopHub. Visas tiesības aizsargātas.</p>
+  </footer>
+
+  <script>
+    // Gallery state
+    let images = [];
+    let currentIndex = 0;
+    let zoomLevel = 1;
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let translateX = 0;
+    let translateY = 0;
+
+    // Elements
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const thumbnails = document.getElementById('thumbnails');
+    const viewerContainer = document.getElementById('viewerContainer');
+    const viewerImage = document.getElementById('viewerImage');
+    const emptyViewer = document.getElementById('emptyViewer');
+    const imageCounter = document.getElementById('imageCounter');
+    const zoomIndicator = document.getElementById('zoomIndicator');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    // Upload Area Click
+    uploadArea.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    // File Input Change
+    fileInput.addEventListener('change', (e) => {
+      handleFiles(e.target.files);
+    });
+
+    // Drag and Drop
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      handleFiles(e.dataTransfer.files);
+    });
+
+    // Handle Files
+    function handleFiles(files) {
+      const fileArray = Array.from(files);
+      const imageFiles = fileArray.filter(file => file.type.startsWith('image/'));
+
+      imageFiles.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          images.push(e.target.result);
+          updateThumbnails();
+          if (images.length === 1) {
+            currentIndex = 0;
+            displayImage();
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Update Thumbnails
+    function updateThumbnails() {
+      thumbnails.innerHTML = '';
+      images.forEach((src, index) => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.className = 'thumbnail';
+        if (index === currentIndex) {
+          img.classList.add('active');
+        }
+        img.onclick = () => {
+          currentIndex = index;
+          displayImage();
+        };
+        thumbnails.appendChild(img);
+      });
+      updateCounter();
+      updateNavigationButtons();
+    }
+
+    // Display Image
+    function displayImage() {
+      if (images.length === 0) {
+        viewerImage.style.display = 'none';
+        emptyViewer.style.display = 'block';
+        return;
+      }
+
+      emptyViewer.style.display = 'none';
+      viewerImage.style.display = 'block';
+      viewerImage.src = images[currentIndex];
+
+      // Reset transformations
+      zoomLevel = 1;
+      translateX = 0;
+      translateY = 0;
+      updateTransform();
+      updateZoomIndicator();
+      updateThumbnails();
+    }
+
+    // Navigation
+    function prevImage() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        displayImage();
+      }
+    }
+
+    function nextImage() {
+      if (currentIndex < images.length - 1) {
+        currentIndex++;
+        displayImage();
+      }
+    }
+
+    function updateNavigationButtons() {
+      prevBtn.disabled = currentIndex === 0 || images.length === 0;
+      nextBtn.disabled = currentIndex === images.length - 1 || images.length === 0;
+    }
+
+    // Keyboard Navigation
+    document.addEventListener('keydown', (e) => {
+      if (images.length === 0) return;
+
+      if (e.key === 'ArrowLeft') prevImage();
+      if (e.key === 'ArrowRight') nextImage();
+      if (e.key === '+' || e.key === '=') zoomIn();
+      if (e.key === '-' || e.key === '_') zoomOut();
+      if (e.key === '0') resetZoom();
+    });
+
+    // Zoom Functions
+    function zoomIn() {
+      if (images.length === 0) return;
+      zoomLevel = Math.min(zoomLevel + 0.25, 5);
+      updateTransform();
+      updateZoomIndicator();
+    }
+
+    function zoomOut() {
+      if (images.length === 0) return;
+      zoomLevel = Math.max(zoomLevel - 0.25, 0.25);
+      updateTransform();
+      updateZoomIndicator();
+    }
+
+    function resetZoom() {
+      if (images.length === 0) return;
+      zoomLevel = 1;
+      translateX = 0;
+      translateY = 0;
+      updateTransform();
+      updateZoomIndicator();
+    }
+
+    // Mouse Wheel Zoom
+    viewerContainer.addEventListener('wheel', (e) => {
+      if (images.length === 0) return;
+      e.preventDefault();
+
+      if (e.deltaY < 0) {
+        zoomLevel = Math.min(zoomLevel + 0.1, 5);
+      } else {
+        zoomLevel = Math.max(zoomLevel - 0.1, 0.25);
+      }
+
+      updateTransform();
+      updateZoomIndicator();
+    });
+
+    // Drag to Pan
+    viewerImage.addEventListener('mousedown', (e) => {
+      if (images.length === 0) return;
+      isDragging = true;
+      startX = e.clientX - translateX;
+      startY = e.clientY - translateY;
+      viewerContainer.style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      translateX = e.clientX - startX;
+      translateY = e.clientY - startY;
+      updateTransform();
+    });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      viewerContainer.style.cursor = 'move';
+    });
+
+    // Touch Support for Mobile
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let lastTouchDistance = 0;
+
+    viewerImage.addEventListener('touchstart', (e) => {
+      if (images.length === 0) return;
+
+      if (e.touches.length === 1) {
+        isDragging = true;
+        touchStartX = e.touches[0].clientX - translateX;
+        touchStartY = e.touches[0].clientY - translateY;
+      } else if (e.touches.length === 2) {
+        isDragging = false;
+        const distance = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        lastTouchDistance = distance;
+      }
+    });
+
+    viewerImage.addEventListener('touchmove', (e) => {
+      if (images.length === 0) return;
+      e.preventDefault();
+
+      if (e.touches.length === 1 && isDragging) {
+        translateX = e.touches[0].clientX - touchStartX;
+        translateY = e.touches[0].clientY - touchStartY;
+        updateTransform();
+      } else if (e.touches.length === 2) {
+        const distance = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+
+        if (lastTouchDistance > 0) {
+          const delta = distance - lastTouchDistance;
+          zoomLevel = Math.max(0.25, Math.min(5, zoomLevel + delta * 0.01));
+          updateTransform();
+          updateZoomIndicator();
+        }
+
+        lastTouchDistance = distance;
+      }
+    });
+
+    viewerImage.addEventListener('touchend', () => {
+      isDragging = false;
+      lastTouchDistance = 0;
+    });
+
+    // Update Transform
+    function updateTransform() {
+      viewerImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${zoomLevel})`;
+    }
+
+    // Update Zoom Indicator
+    function updateZoomIndicator() {
+      zoomIndicator.textContent = `${Math.round(zoomLevel * 100)}%`;
+    }
+
+    // Update Counter
+    function updateCounter() {
+      imageCounter.textContent = images.length > 0 ? `${currentIndex + 1} / ${images.length}` : '0 / 0';
+    }
+
+    // Clear Gallery
+    function clearGallery() {
+      if (confirm('Vai tiešām vēlaties notīrīt visus attēlus?')) {
+        images = [];
+        currentIndex = 0;
+        thumbnails.innerHTML = '';
+        displayImage();
+        updateCounter();
+        updateNavigationButtons();
+      }
+    }
+
+    // Imgur Integration
+    async function loadImgurImages() {
+      const input = document.getElementById('imgurInput');
+      const url = input.value.trim();
+
+      if (!url) {
+        alert('Lūdzu, ievadiet Imgur saiti');
+        return;
+      }
+
+      try {
+        // Extract album/gallery ID from URL
+        let albumId = '';
+
+        // Handle different Imgur URL formats
+        if (url.includes('/a/')) {
+          albumId = url.split('/a/')[1].split(/[/?]/)[0];
+        } else if (url.includes('/gallery/')) {
+          albumId = url.split('/gallery/')[1].split(/[/?]/)[0];
+        } else if (url.includes('imgur.com/')) {
+          // Single image
+          const imageId = url.split('imgur.com/')[1].split(/[./?]/)[0];
+          const imageUrl = `https://i.imgur.com/${imageId}.jpg`;
+          images.push(imageUrl);
+          if (images.length === 1) {
+            currentIndex = 0;
+          }
+          updateThumbnails();
+          displayImage();
+          input.value = '';
+          return;
+        }
+
+        if (!albumId) {
+          alert('Nederīga Imgur saite. Lūdzu, izmantojiet formātu: https://imgur.com/a/... vai https://imgur.com/gallery/...');
+          return;
+        }
+
+        // For demonstration, we'll show a message about Imgur API
+        // In production, you would need to use Imgur API with client ID
+        alert('Imgur albums prasa API atslēgu. Šobrīd varat augšupielādēt attēlus tieši vai izmantot atsevišķu Imgur attēla saiti (piemēram: https://imgur.com/abc123)');
+
+      } catch (error) {
+        alert('Kļūda ielādējot no Imgur: ' + error.message);
+      }
+    }
+
+    // Initialize
+    updateCounter();
+    updateNavigationButtons();
+    updateZoomIndicator();
+  </script>
+</body>
+</html>
