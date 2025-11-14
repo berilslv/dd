@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <title>Par Mums | LaptopHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:400,600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f4f5f7;
+      color: #222e36;
+    }
+
+    /* Navigation */
+    nav {
+      background: #233259;
+      padding: 16px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #fff;
+      text-decoration: none;
+    }
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 32px;
+      align-items: center;
+    }
+    .nav-menu a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .nav-menu a:hover {
+      opacity: 0.8;
+    }
+    .admin-link {
+      background: #425671;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    /* Page Header */
+    .page-header {
+      background: linear-gradient(120deg, #233259 0%, #425671 100%);
+      padding: 50px 20px;
+      text-align: center;
+      color: #fff;
+    }
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .page-subtitle {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    /* Content Section */
+    .content-section {
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+    .about-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(44, 62, 80, 0.08);
+      padding: 45px;
+      margin-bottom: 30px;
+    }
+    .about-card h2 {
+      font-size: 1.8rem;
+      color: #233259;
+      margin-bottom: 20px;
+    }
+    .about-card p {
+      font-size: 1rem;
+      color: #475067;
+      line-height: 1.8;
+      margin-bottom: 15px;
+    }
+    .about-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Values Grid */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin: 40px 0;
+    }
+    .value-item {
+      background: #fff;
+      border-radius: 14px;
+      padding: 30px;
+      box-shadow: 0 2px 12px rgba(44, 62, 80, 0.08);
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .value-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(44, 62, 80, 0.12);
+    }
+    .value-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+    .value-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #233259;
+      margin-bottom: 10px;
+    }
+    .value-description {
+      font-size: 0.95rem;
+      color: #5a6b7d;
+      line-height: 1.6;
+    }
+
+    /* Stats Section */
+    .stats-section {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(44, 62, 80, 0.08);
+      padding: 45px;
+      text-align: center;
+      margin: 40px 0;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+    .stat-item {
+      padding: 20px;
+    }
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 600;
+      color: #233259;
+      margin-bottom: 10px;
+    }
+    .stat-label {
+      font-size: 1rem;
+      color: #5a6b7d;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(120deg, #233259 0%, #425671 100%);
+      border-radius: 16px;
+      padding: 50px 40px;
+      text-align: center;
+      color: #fff;
+      margin: 40px 0;
+    }
+    .cta-title {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    .cta-text {
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: #fff;
+      color: #233259;
+      padding: 14px 40px;
+      border-radius: 32px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Footer */
+    footer {
+      background: #2d3a4c;
+      color: #d4dae1;
+      padding: 30px 20px;
+      text-align: center;
+      margin-top: 60px;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: #d4dae1;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover {
+      color: #fff;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .page-title {
+        font-size: 1.8rem;
+      }
+      .about-card {
+        padding: 30px 25px;
+      }
+      .about-card h2 {
+        font-size: 1.5rem;
+      }
+      .nav-menu {
+        gap: 18px;
+        font-size: 0.9rem;
+      }
+      .values-grid {
+        grid-template-columns: 1fr;
+      }
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      .cta-section {
+        padding: 40px 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">💼 LaptopHub</a>
+      <ul class="nav-menu">
+        <li><a href="index.html">Sākums</a></li>
+        <li><a href="products.html">Veikals</a></li>
+        <li><a href="about.html">Par Mums</a></li>
+        <li><a href="contact.html">Kontakti</a></li>
+        <li><a href="login.html" class="admin-link">Admin</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-title">Par LaptopHub</div>
+    <div class="page-subtitle">Jūsu uzticamais partneris kvalitatīvu biznesa klēpjdatoru iegādē</div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="content-section">
+    <div class="about-card">
+      <h2>Mūsu Stāsts</h2>
+      <p>
+        LaptopHub tika dibināts ar vienkāršu ideju: padarīt kvalitatīvus biznesa klēpjdatorus pieejamus ikvienam.
+        Mēs saprotam, ka uzticams un veiktspējīgs klēpjdators ir būtisks rīks mūsdienu darba vidē, taču jaunāko
+        modeļu cenas var būt pārāk augstas maziem uzņēmumiem un individuāliem lietotājiem.
+      </p>
+      <p>
+        Tāpēc mēs specializējamies lietotu, bet izcilā stāvoklī esošu premium biznesa klēpjdatoru pārdošanā.
+        Mūsu komanda rūpīgi pārbauda katru ierīci, nodrošinot, ka tā atbilst augstākajiem kvalitātes standartiem,
+        pirms tā nonāk pie jums.
+      </p>
+    </div>
+
+    <!-- Values Grid -->
+    <div class="values-grid">
+      <div class="value-item">
+        <div class="value-icon">✓</div>
+        <h3 class="value-title">Kvalitāte</h3>
+        <p class="value-description">
+          Katrs klēpjdators ir profesionāli pārbaudīts un sertificēts, lai nodrošinātu izcilu darbību.
+        </p>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">🛡️</div>
+        <h3 class="value-title">Garantija</h3>
+        <p class="value-description">
+          Visiem produktiem piedāvājam 1 gada garantiju, lai jūs varētu būt droši par savu ieguldījumu.
+        </p>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">💰</div>
+        <h3 class="value-title">Cena</h3>
+        <p class="value-description">
+          Piedāvājam labākās cenas tirgū, nesamazinot kvalitāti vai klientu apkalpošanu.
+        </p>
+      </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+      <h2>Mūsu Sasniegumi</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">1000+</div>
+          <div class="stat-label">Apmierināti Klienti</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">98%</div>
+          <div class="stat-label">Pozitīvas Atsauksmes</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">500+</div>
+          <div class="stat-label">Pārdotie Klēpjdatori</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-card">
+      <h2>Kāpēc Izvēlēties Mūs?</h2>
+      <p>
+        Mēs esam vairāk nekā tikai veikals. Mēs esam komanda, kas rūpējas par jūsu vajadzībām. Katrs mūsu
+        darbinieks ir padziļināti iepazinies ar produktiem, ko piedāvājam, un vienmēr ir gatavs sniegt
+        konsultāciju un palīdzēt izvēlēties piemērotāko risinājumu.
+      </p>
+      <p>
+        Mūsu mērķis ir veidot ilgtermiņa attiecības ar klientiem, nodrošinot ne tikai kvalitatīvus produktus,
+        bet arī izcilu pēcpārdošanas atbalstu. Jūsu apmierinātība ir mūsu prioritāte!
+      </p>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+      <h2 class="cta-title">Gatavs Atrast Savu Perfekto Klēpjdatoru?</h2>
+      <p class="cta-text">Iepazīstieties ar mūsu plašo klēpjdatoru klāstu un atrodiet to, kas vislabāk atbilst jūsu vajadzībām.</p>
+      <a href="products.html" class="cta-btn">Apskatīt Produktus</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="index.html">Sākums</a>
+      <a href="products.html">Veikals</a>
+      <a href="about.html">Par Mums</a>
+      <a href="contact.html">Kontakti</a>
+    </div>
+    <p>&copy; 2024 LaptopHub. Visas tiesības aizsargātas.</p>
+  </footer>
+</body>
+</html>

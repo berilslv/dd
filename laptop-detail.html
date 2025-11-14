@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <title>Laptop Details | LaptopHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:400,600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f4f5f7;
+      color: #222e36;
+    }
+
+    /* Navigation */
+    nav {
+      background: #233259;
+      padding: 16px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #fff;
+      text-decoration: none;
+    }
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 32px;
+      align-items: center;
+    }
+    .nav-menu a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .nav-menu a:hover {
+      opacity: 0.8;
+    }
+    .admin-link {
+      background: #425671;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    /* Detail Container */
+    .detail-container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .back-btn {
+      display: inline-block;
+      color: #233259;
+      text-decoration: none;
+      font-weight: 600;
+      margin-bottom: 20px;
+      transition: opacity 0.2s;
+    }
+    .back-btn:hover {
+      opacity: 0.7;
+    }
+
+    .detail-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(44, 62, 80, 0.1);
+      overflow: hidden;
+    }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      padding: 40px;
+    }
+    .detail-image-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .detail-img {
+      width: 100%;
+      max-width: 450px;
+      height: 300px;
+      object-fit: contain;
+      background: #eef1f5;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .condition-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .condition-excellent {
+      background: #d4edda;
+      color: #155724;
+    }
+    .condition-very-good {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+    .condition-good {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .detail-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .detail-brand {
+      font-size: 0.95rem;
+      color: #5a6b7d;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .detail-model {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #233259;
+      margin-bottom: 20px;
+    }
+    .detail-price {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: #233259;
+      margin-bottom: 25px;
+    }
+    .detail-description {
+      font-size: 1rem;
+      color: #475067;
+      line-height: 1.7;
+      margin-bottom: 25px;
+    }
+
+    .specs-section {
+      margin-bottom: 30px;
+    }
+    .specs-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #233259;
+      margin-bottom: 15px;
+    }
+    .spec-item {
+      display: flex;
+      padding: 12px 0;
+      border-bottom: 1px solid #e8ecf0;
+    }
+    .spec-item:last-child {
+      border-bottom: none;
+    }
+    .spec-label {
+      font-weight: 600;
+      color: #233259;
+      min-width: 140px;
+    }
+    .spec-value {
+      color: #5a6b7d;
+    }
+
+    .features-section {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+    }
+    .features-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #233259;
+      margin-bottom: 15px;
+    }
+    .features-list {
+      list-style: none;
+    }
+    .features-list li {
+      padding: 8px 0;
+      color: #475067;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .features-list li:before {
+      content: '✓';
+      color: #28a745;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: auto;
+    }
+    .buy-btn {
+      flex: 1;
+      background: #233259;
+      color: #fff;
+      border: none;
+      padding: 16px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.14s;
+      text-decoration: none;
+      text-align: center;
+    }
+    .buy-btn:hover {
+      background: #425671;
+    }
+    .contact-btn {
+      flex: 1;
+      background: #fff;
+      color: #233259;
+      border: 2px solid #233259;
+      padding: 16px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.14s;
+      text-decoration: none;
+      text-align: center;
+    }
+    .contact-btn:hover {
+      background: #233259;
+      color: #fff;
+    }
+
+    /* Footer */
+    footer {
+      background: #2d3a4c;
+      color: #d4dae1;
+      padding: 30px 20px;
+      text-align: center;
+      margin-top: 60px;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: #d4dae1;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover {
+      color: #fff;
+    }
+
+    .error-message {
+      text-align: center;
+      padding: 60px 20px;
+      color: #5a6b7d;
+    }
+    .error-message h2 {
+      font-size: 2rem;
+      color: #233259;
+      margin-bottom: 15px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .detail-grid {
+        grid-template-columns: 1fr;
+        padding: 25px;
+        gap: 30px;
+      }
+      .detail-model {
+        font-size: 1.5rem;
+      }
+      .detail-price {
+        font-size: 2rem;
+      }
+      .nav-menu {
+        gap: 18px;
+        font-size: 0.9rem;
+      }
+      .action-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">💼 LaptopHub</a>
+      <ul class="nav-menu">
+        <li><a href="index.html">Sākums</a></li>
+        <li><a href="products.html">Veikals</a></li>
+        <li><a href="about.html">Par Mums</a></li>
+        <li><a href="contact.html">Kontakti</a></li>
+        <li><a href="login.html" class="admin-link">Admin</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Detail Container -->
+  <div class="detail-container">
+    <a href="products.html" class="back-btn">← Atpakaļ uz Veikalu</a>
+
+    <div id="laptopDetail">
+      <!-- Content will be loaded by JavaScript -->
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="index.html">Sākums</a>
+      <a href="products.html">Veikals</a>
+      <a href="about.html">Par Mums</a>
+      <a href="contact.html">Kontakti</a>
+    </div>
+    <p>&copy; 2024 LaptopHub. Visas tiesības aizsargātas.</p>
+  </footer>
+
+  <script>
+    // Get default laptops
+    function getDefaultLaptops() {
+      return [
+        {
+          brand: 'Lenovo ThinkPad',
+          model: 'ThinkPad T490',
+          processor: 'Intel Core i7',
+          ram: '16GB RAM',
+          storage: '512GB SSD',
+          screen: '14" FHD Display',
+          price: 549,
+          condition: 'excellent',
+          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+T490',
+          description: 'Profesionāls biznesa klēpjdators ar izcilu veiktspēju'
+        },
+        {
+          brand: 'Dell Latitude',
+          model: 'Latitude 5490',
+          processor: 'Intel Core i7',
+          ram: '16GB RAM',
+          storage: '512GB SSD',
+          screen: '14" FHD Display',
+          price: 499,
+          condition: 'excellent',
+          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=Dell+Latitude+5490',
+          description: 'Uzticams Dell biznesa klēpjdators'
+        },
+        {
+          brand: 'HP EliteBook',
+          model: 'EliteBook 840 G6',
+          processor: 'Intel Core i5',
+          ram: '8GB RAM',
+          storage: '256GB SSD',
+          screen: '14" FHD Display',
+          price: 449,
+          condition: 'very-good',
+          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=HP+EliteBook+840',
+          description: 'Kompakts un jaudīgs HP klēpjdators'
+        },
+        {
+          brand: 'Lenovo ThinkPad',
+          model: 'X1 Carbon Gen 7',
+          processor: 'Intel Core i7',
+          ram: '16GB RAM',
+          storage: '512GB SSD',
+          screen: '14" FHD Touch',
+          price: 829,
+          condition: 'excellent',
+          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+X1+Carbon',
+          description: 'Premium ultrabook ar skārienekrānu'
+        }
+      ];
+    }
+
+    // Condition labels in Latvian
+    const conditionLabels = {
+      'excellent': 'Izcils Stāvoklis',
+      'very-good': 'Ļoti Labs Stāvoklis',
+      'good': 'Labs Stāvoklis'
+    };
+
+    // Load laptop details
+    function loadLaptopDetails() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const laptopId = parseInt(urlParams.get('id'));
+
+      const laptops = JSON.parse(localStorage.getItem('laptops')) || getDefaultLaptops();
+      const laptop = laptops[laptopId];
+
+      const container = document.getElementById('laptopDetail');
+
+      if (!laptop) {
+        container.innerHTML = `
+          <div class="error-message">
+            <h2>Klēpjdators nav atrasts</h2>
+            <p>Diemžēl šis produkts vairs nav pieejams.</p>
+            <a href="products.html" class="buy-btn" style="display: inline-block; margin-top: 20px;">Atgriezties uz Veikalu</a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="detail-card">
+          <div class="detail-grid">
+            <div class="detail-image-section">
+              <img class="detail-img" src="${laptop.imageUrl}" alt="${laptop.brand} ${laptop.model}">
+              <span class="condition-badge condition-${laptop.condition}">${conditionLabels[laptop.condition] || laptop.condition}</span>
+            </div>
+
+            <div class="detail-info">
+              <div class="detail-brand">${laptop.brand}</div>
+              <h1 class="detail-model">${laptop.model}</h1>
+              <div class="detail-price">$${laptop.price}</div>
+              <p class="detail-description">${laptop.description}</p>
+
+              <div class="specs-section">
+                <h3 class="specs-title">Specifikācijas</h3>
+                <div class="spec-item">
+                  <span class="spec-label">Procesors:</span>
+                  <span class="spec-value">${laptop.processor}</span>
+                </div>
+                <div class="spec-item">
+                  <span class="spec-label">Operatīvā Atmiņa:</span>
+                  <span class="spec-value">${laptop.ram}</span>
+                </div>
+                <div class="spec-item">
+                  <span class="spec-label">Atmiņa:</span>
+                  <span class="spec-value">${laptop.storage}</span>
+                </div>
+                <div class="spec-item">
+                  <span class="spec-label">Ekrāns:</span>
+                  <span class="spec-value">${laptop.screen}</span>
+                </div>
+              </div>
+
+              <div class="features-section">
+                <h3 class="features-title">Iekļauts Komplektā</h3>
+                <ul class="features-list">
+                  <li>1 Gada Garantija</li>
+                  <li>Bezmaksas Piegāde</li>
+                  <li>Profesionāla Pārbaude un Tīrīšana</li>
+                  <li>Licencēta Windows 10/11 Pro</li>
+                  <li>Lādētājs un Visi Kabeļi</li>
+                </ul>
+              </div>
+
+              <div class="action-buttons">
+                <a href="contact.html" class="buy-btn">Sazināties</a>
+                <a href="products.html" class="contact-btn">Citi Produkti</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Initialize
+    loadLaptopDetails();
+  </script>
+</body>
+</html>
