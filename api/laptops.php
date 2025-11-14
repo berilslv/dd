@@ -72,6 +72,22 @@ elseif ($method === 'POST') {
             sendJSON(['success' => false, 'error' => 'At least one image is required'], 400);
         }
 
+        // Process images - convert base64 to local files if needed
+        $processedImages = [];
+        foreach ($data['images'] as $image) {
+            // Check if image is base64 data URI
+            if (strpos($image, 'data:image/') === 0) {
+                $result = saveBase64Image($image, LAPTOP_IMAGES_DIR, 'laptop');
+                if (!$result['success']) {
+                    sendJSON(['success' => false, 'error' => 'Failed to save image: ' . $result['error']], 400);
+                }
+                $processedImages[] = $result['path'];
+            } else {
+                // Image is already a path or URL
+                $processedImages[] = $image;
+            }
+        }
+
         // Read existing laptops
         $laptops = readJSONFile(LAPTOPS_FILE);
 
@@ -90,8 +106,8 @@ elseif ($method === 'POST') {
             'description' => sanitizeInput($data['description'] ?? ''),
             'visualRating' => (int)($data['visualRating'] ?? 7),
             'technicalRating' => (int)($data['technicalRating'] ?? 8),
-            'images' => $data['images'],
-            'imageUrl' => $data['images'][0],
+            'images' => $processedImages,
+            'imageUrl' => $processedImages[0],
             'created_at' => date('Y-m-d H:i:s')
         ];
 
@@ -157,8 +173,34 @@ elseif ($method === 'PUT') {
 
         // Update images if provided
         if (isset($data['images']) && is_array($data['images'])) {
-            $laptops[$laptopIndex]['images'] = $data['images'];
-            $laptops[$laptopIndex]['imageUrl'] = $data['images'][0] ?? '';
+            // Process images - convert base64 to local files if needed
+            $processedImages = [];
+            foreach ($data['images'] as $image) {
+                // Check if image is base64 data URI
+                if (strpos($image, 'data:image/') === 0) {
+                    $result = saveBase64Image($image, LAPTOP_IMAGES_DIR, 'laptop');
+                    if (!$result['success']) {
+                        sendJSON(['success' => false, 'error' => 'Failed to save image: ' . $result['error']], 400);
+                    }
+                    $processedImages[] = $result['path'];
+                } else {
+                    // Image is already a path or URL
+                    $processedImages[] = $image;
+                }
+            }
+
+            // Delete old image files if they were local files
+            if (isset($laptops[$laptopIndex]['images']) && is_array($laptops[$laptopIndex]['images'])) {
+                foreach ($laptops[$laptopIndex]['images'] as $oldImage) {
+                    // Only delete if it's a local file and not in the new images array
+                    if (strpos($oldImage, 'uploads/') === 0 && !in_array($oldImage, $processedImages)) {
+                        deleteImageFile($oldImage);
+                    }
+                }
+            }
+
+            $laptops[$laptopIndex]['images'] = $processedImages;
+            $laptops[$laptopIndex]['imageUrl'] = $processedImages[0] ?? '';
         }
 
         $laptops[$laptopIndex]['updated_at'] = date('Y-m-d H:i:s');
@@ -195,8 +237,10 @@ elseif ($method === 'DELETE') {
 
         // Find and remove laptop
         $found = false;
+        $laptopToDelete = null;
         foreach ($laptops as $index => $laptop) {
             if ($laptop['id'] == $id) {
+                $laptopToDelete = $laptop;
                 array_splice($laptops, $index, 1);
                 $found = true;
                 break;
@@ -205,6 +249,16 @@ elseif ($method === 'DELETE') {
 
         if (!$found) {
             sendJSON(['success' => false, 'error' => 'Laptop not found'], 404);
+        }
+
+        // Delete associated image files (only if they are local files in uploads directory)
+        if ($laptopToDelete && isset($laptopToDelete['images']) && is_array($laptopToDelete['images'])) {
+            foreach ($laptopToDelete['images'] as $imagePath) {
+                // Only delete if it's a local file in the uploads directory
+                if (strpos($imagePath, 'uploads/') === 0) {
+                    deleteImageFile($imagePath);
+                }
+            }
         }
 
         // Save to file

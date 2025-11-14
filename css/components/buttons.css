@@ -1,0 +1,132 @@
+/* Button Styles */
+.shop-btn {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 14px 40px;
+  border-radius: 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(44, 62, 80, 0.08);
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+  transition: background 0.14s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.shop-btn:hover {
+  background: var(--secondary-color);
+}
+
+.view-btn {
+  width: 100%;
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+
+.view-btn:hover {
+  background: var(--secondary-color);
+}
+
+.logout-btn {
+  background: var(--btn-danger);
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+
+.logout-btn:hover {
+  background: var(--btn-danger-hover);
+}
+
+.add-laptop-btn {
+  background: var(--btn-success);
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.14s;
+  margin-top: 10px;
+}
+
+.add-laptop-btn:hover {
+  background: var(--btn-success-hover);
+}
+
+.add-laptop-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.delete-btn {
+  background: var(--btn-danger);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+
+.delete-btn:hover {
+  background: var(--btn-danger-hover);
+}
+
+.remove-image-btn {
+  background: var(--btn-danger);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.rot-btn {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background 0.16s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rot-btn:hover {
+  background: #3a4b6e;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .rot-btn {
+    width: 38px;
+    height: 38px;
+    font-size: 1.3rem;
+  }
+}

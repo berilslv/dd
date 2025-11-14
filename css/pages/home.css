@@ -1,0 +1,153 @@
+/* Homepage Styles */
+
+/* Header Hero */
+header {
+  background: linear-gradient(120deg, #e6eaee 60%, #2d3a4c 100%);
+  padding: 60px 20px 50px 20px;
+  text-align: center;
+}
+
+.hero {
+  max-width: 700px;
+  margin: 0 auto;
+  background: var(--card-bg);
+  border-radius: var(--border-radius-xl);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  padding: 45px 35px 35px 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-title {
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--primary-color);
+}
+
+.hero-tagline {
+  font-size: 1.1rem;
+  margin-bottom: 35px;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+/* Laptop Rotator */
+.hero-rotator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.laptop-img {
+  width: 380px;
+  height: 190px;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(44, 62, 80, 0.08);
+  background: var(--image-bg);
+  margin: 0 20px;
+  transition: box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.laptop-img:hover {
+  box-shadow: 0 6px 20px rgba(44, 62, 80, 0.12);
+}
+
+/* Laptop Info */
+.laptop-info {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.laptop-model {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+}
+
+.laptop-specs {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Highlights */
+.highlights {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.highlight-item {
+  background: var(--highlight-bg);
+  color: #223146;
+  border-radius: 10px;
+  padding: 10px 24px;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
+  font-weight: 500;
+}
+
+/* Newsletter */
+.newsletter {
+  margin: 60px auto;
+  max-width: 450px;
+  background: var(--card-bg);
+  border-radius: 18px;
+  box-shadow: 0 2px 10px rgba(56, 72, 97, 0.07);
+  padding: 30px 35px;
+  text-align: center;
+}
+
+.news-title {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  color: #25344e;
+  font-weight: 600;
+}
+
+.news-subtitle {
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero {
+    padding: 30px 20px;
+  }
+
+  .hero-title {
+    font-size: 1.6rem;
+  }
+
+  .hero-tagline {
+    font-size: 1rem;
+  }
+
+  .laptop-img {
+    width: 70vw;
+    max-width: 320px;
+    height: 160px;
+    margin: 0 10px;
+  }
+
+  .highlights {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .newsletter {
+    margin: 40px 20px;
+  }
+}
