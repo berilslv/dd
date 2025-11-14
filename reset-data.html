@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <title>Reset Data | LaptopHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .reset-card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+    p {
+      color: #666;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+    .btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin: 10px;
+    }
+    .btn:hover {
+      background: #764ba2;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+    }
+    .btn.danger {
+      background: #dc3545;
+    }
+    .btn.danger:hover {
+      background: #c82333;
+    }
+    .status {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      display: none;
+    }
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      display: block;
+    }
+    .status.info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+      display: block;
+    }
+    .links {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 2px solid #eee;
+    }
+    .links a {
+      color: #667eea;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+    .links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="reset-card">
+    <h1>🔄 Reset Data</h1>
+    <p>
+      This will clear all laptop data from localStorage and reload with the new default laptops
+      that include multiple images, visual ratings, and technical ratings.
+    </p>
+
+    <div id="status" class="status"></div>
+
+    <button class="btn danger" onclick="resetData()">Reset All Data</button>
+    <button class="btn" onclick="checkData()">Check Current Data</button>
+
+    <div class="links">
+      <a href="index.html">Home</a>
+      <a href="login.html">Admin Panel</a>
+      <a href="products.html">Products</a>
+    </div>
+  </div>
+
+  <script>
+    function resetData() {
+      const confirmed = confirm('Are you sure you want to reset all laptop data? This will delete any laptops you added.');
+
+      if (confirmed) {
+        localStorage.removeItem('laptops');
+        localStorage.removeItem('adminLoggedIn');
+
+        const status = document.getElementById('status');
+        status.className = 'status success';
+        status.innerHTML = `
+          ✅ <strong>Success!</strong><br>
+          All data has been cleared. Click below to go to the home page with fresh data.
+        `;
+
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 2000);
+      }
+    }
+
+    function checkData() {
+      const laptops = JSON.parse(localStorage.getItem('laptops'));
+      const status = document.getElementById('status');
+
+      if (!laptops) {
+        status.className = 'status info';
+        status.innerHTML = '📋 <strong>No data found.</strong> Click "Reset All Data" to load defaults.';
+      } else {
+        const hasImages = laptops.some(l => l.images && l.images.length > 0);
+        const hasRatings = laptops.some(l => l.visualRating || l.technicalRating);
+
+        status.className = 'status info';
+        status.innerHTML = `
+          📊 <strong>Current Data:</strong><br>
+          • ${laptops.length} laptop(s) in storage<br>
+          • ${hasImages ? '✅' : '❌'} Multiple images feature<br>
+          • ${hasRatings ? '✅' : '❌'} Rating system
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
