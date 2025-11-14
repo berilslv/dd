@@ -1,0 +1,78 @@
+/* Card Components */
+.product-card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 2px 12px rgba(44, 62, 80, 0.08);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(44, 62, 80, 0.12);
+}
+
+.product-img {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  background: var(--image-bg);
+  padding: 15px;
+}
+
+.product-info {
+  padding: 20px;
+}
+
+.product-brand {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.product-model {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.product-specs {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.product-price {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.condition-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.condition-excellent {
+  background: var(--condition-excellent-bg);
+  color: var(--condition-excellent-text);
+}
+
+.condition-very-good {
+  background: var(--condition-very-good-bg);
+  color: var(--condition-very-good-text);
+}
+
+.condition-good {
+  background: var(--condition-good-bg);
+  color: var(--condition-good-text);
+}

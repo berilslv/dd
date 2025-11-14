@@ -1,0 +1,23 @@
+# Uploaded files (user-generated content)
+uploads/
+!uploads/.gitkeep
+
+# PHP error logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+tmp/
+temp/

@@ -1,0 +1,43 @@
+/* CSS Variables and Theme Colors */
+:root {
+  /* Colors */
+  --primary-color: #233259;
+  --secondary-color: #425671;
+  --background-color: #f4f5f7;
+  --text-color: #222e36;
+  --text-muted: #5a6b7d;
+  --text-light: #475067;
+  --border-color: #b3bfcf;
+  --footer-bg: #2d3a4c;
+  --footer-text: #d4dae1;
+
+  /* Condition colors */
+  --condition-excellent-bg: #d4edda;
+  --condition-excellent-text: #155724;
+  --condition-very-good-bg: #d1ecf1;
+  --condition-very-good-text: #0c5460;
+  --condition-good-bg: #fff3cd;
+  --condition-good-text: #856404;
+
+  /* Component colors */
+  --card-bg: #fff;
+  --card-light-bg: #f8f9fa;
+  --card-border: #e8ecf0;
+  --highlight-bg: #edf2f6;
+  --image-bg: #eef1f5;
+
+  /* Button colors */
+  --btn-success: #28a745;
+  --btn-success-hover: #218838;
+  --btn-danger: #dc3545;
+  --btn-danger-hover: #c82333;
+
+  /* Spacing */
+  --container-max-width: 1200px;
+  --border-radius: 8px;
+  --border-radius-lg: 14px;
+  --border-radius-xl: 20px;
+
+  /* Typography */
+  --font-family: 'Poppins', sans-serif;
+}

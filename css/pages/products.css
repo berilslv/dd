@@ -1,0 +1,68 @@
+/* Products Page Styles */
+
+/* Page Header */
+.page-header {
+  background: linear-gradient(120deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  padding: 50px 20px;
+  text-align: center;
+  color: #fff;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.page-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* Filters */
+.filters {
+  max-width: var(--container-max-width);
+  margin: 30px auto;
+  padding: 0 20px;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-label {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+/* Products Grid */
+.products-container {
+  max-width: var(--container-max-width);
+  margin: 0 auto 60px auto;
+  padding: 0 20px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.no-products {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 1.8rem;
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+}
