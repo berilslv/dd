@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <title>Veikals | LaptopHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:400,600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f4f5f7;
+      color: #222e36;
+    }
+
+    /* Navigation */
+    nav {
+      background: #233259;
+      padding: 16px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #fff;
+      text-decoration: none;
+    }
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 32px;
+      align-items: center;
+    }
+    .nav-menu a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .nav-menu a:hover {
+      opacity: 0.8;
+    }
+    .admin-link {
+      background: #425671;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    /* Page Header */
+    .page-header {
+      background: linear-gradient(120deg, #233259 0%, #425671 100%);
+      padding: 50px 20px;
+      text-align: center;
+      color: #fff;
+    }
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .page-subtitle {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    /* Filters */
+    .filters {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .filter-label {
+      font-weight: 600;
+      color: #233259;
+    }
+    .filter-select {
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: 1px solid #b3bfcf;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    /* Products Grid */
+    .products-container {
+      max-width: 1200px;
+      margin: 0 auto 60px auto;
+      padding: 0 20px;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+    .product-card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px rgba(44, 62, 80, 0.08);
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(44, 62, 80, 0.12);
+    }
+    .product-img {
+      width: 100%;
+      height: 180px;
+      object-fit: contain;
+      background: #eef1f5;
+      padding: 15px;
+    }
+    .product-info {
+      padding: 20px;
+    }
+    .product-brand {
+      font-size: 0.85rem;
+      color: #5a6b7d;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+    .product-model {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #233259;
+      margin-bottom: 10px;
+    }
+    .product-specs {
+      font-size: 0.9rem;
+      color: #5a6b7d;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .product-price {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #233259;
+      margin-bottom: 10px;
+    }
+    .condition-badge {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .condition-excellent {
+      background: #d4edda;
+      color: #155724;
+    }
+    .condition-very-good {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+    .condition-good {
+      background: #fff3cd;
+      color: #856404;
+    }
+    .view-btn {
+      width: 100%;
+      background: #233259;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.14s;
+    }
+    .view-btn:hover {
+      background: #425671;
+    }
+
+    .no-products {
+      text-align: center;
+      padding: 60px 20px;
+      color: #5a6b7d;
+      font-size: 1.1rem;
+    }
+
+    /* Footer */
+    footer {
+      background: #2d3a4c;
+      color: #d4dae1;
+      padding: 30px 20px;
+      text-align: center;
+      margin-top: 40px;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: #d4dae1;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover {
+      color: #fff;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .page-title {
+        font-size: 1.8rem;
+      }
+      .nav-menu {
+        gap: 18px;
+        font-size: 0.9rem;
+      }
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">💼 LaptopHub</a>
+      <ul class="nav-menu">
+        <li><a href="index.html">Sākums</a></li>
+        <li><a href="products.html">Veikals</a></li>
+        <li><a href="about.html">Par Mums</a></li>
+        <li><a href="contact.html">Kontakti</a></li>
+        <li><a href="login.html" class="admin-link">Admin</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-title">Mūsu Klēpjdatoru Kolekcija</div>
+    <div class="page-subtitle">Atrodiet ideālo biznesa klēpjdatoru jūsu vajadzībām</div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <span class="filter-label">Filtrēt pēc:</span>
+    <select class="filter-select" id="brandFilter">
+      <option value="all">Visi Zīmoli</option>
+      <option value="Lenovo ThinkPad">Lenovo ThinkPad</option>
+      <option value="Dell Latitude">Dell Latitude</option>
+      <option value="HP EliteBook">HP EliteBook</option>
+    </select>
+    <select class="filter-select" id="conditionFilter">
+      <option value="all">Visi Stāvokļi</option>
+      <option value="excellent">Izcils</option>
+      <option value="very-good">Ļoti Labs</option>
+      <option value="good">Labs</option>
+    </select>
+    <select class="filter-select" id="sortFilter">
+      <option value="price-low">Cena: Zemākā - Augstākā</option>
+      <option value="price-high">Cena: Augstākā - Zemākā</option>
+      <option value="brand">Pēc Zīmola</option>
+    </select>
+  </div>
+
+  <!-- Products Grid -->
+  <div class="products-container">
+    <div class="products-grid" id="productsGrid">
+      <!-- Products will be loaded here by JavaScript -->
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="index.html">Sākums</a>
+      <a href="products.html">Veikals</a>
+      <a href="about.html">Par Mums</a>
+      <a href="contact.html">Kontakti</a>
+    </div>
+    <p>&copy; 2024 LaptopHub. Visas tiesības aizsargātas.</p>
+  </footer>
+
+  <script>
+    // Get default laptops
+    function getDefaultLaptops() {
+      return [
+        {
+          brand: 'Lenovo ThinkPad',
+          model: 'ThinkPad T490',
+          processor: 'Intel Core i7',
+          ram: '16GB RAM',
+          storage: '512GB SSD',
+          screen: '14" FHD Display',
+          price: 549,
+          condition: 'excellent',
+          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+T490',
+          description: 'Profesionāls biznesa klēpjdators ar izcilu veiktspēju'
+        },
+        {
+          brand: 'Dell Latitude',
+          model: 'Latitude 5490',
+          processor: 'Intel Core i7',
+          ram: '16GB RAM',
+          storage: '512GB SSD',
+          screen: '14" FHD Display',
+          price: 499,
+          condition: 'excellent',
+          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=Dell+Latitude+5490',
+          description: 'Uzticams Dell biznesa klēpjdators'
+        },
+        {
+          brand: 'HP EliteBook',
+          model: 'EliteBook 840 G6',
+          processor: 'Intel Core i5',
+          ram: '8GB RAM',
+          storage: '256GB SSD',
+          screen: '14" FHD Display',
+          price: 449,
+          condition: 'very-good',
+          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=HP+EliteBook+840',
+          description: 'Kompakts un jaudīgs HP klēpjdators'
+        },
+        {
+          brand: 'Lenovo ThinkPad',
+          model: 'X1 Carbon Gen 7',
+          processor: 'Intel Core i7',
+          ram: '16GB RAM',
+          storage: '512GB SSD',
+          screen: '14" FHD Touch',
+          price: 829,
+          condition: 'excellent',
+          imageUrl: 'https://via.placeholder.com/380x190/eef1f5/233259?text=ThinkPad+X1+Carbon',
+          description: 'Premium ultrabook ar skārienekrānu'
+        }
+      ];
+    }
+
+    // Load laptops from localStorage or use defaults
+    let laptops = JSON.parse(localStorage.getItem('laptops')) || getDefaultLaptops();
+
+    // Save defaults if none exist
+    if (!localStorage.getItem('laptops')) {
+      localStorage.setItem('laptops', JSON.stringify(laptops));
+    }
+
+    let filteredLaptops = [...laptops];
+
+    // Condition labels in Latvian
+    const conditionLabels = {
+      'excellent': 'Izcils',
+      'very-good': 'Ļoti Labs',
+      'good': 'Labs'
+    };
+
+    function renderProducts() {
+      const grid = document.getElementById('productsGrid');
+
+      if (filteredLaptops.length === 0) {
+        grid.innerHTML = '<div class="no-products">Nav atrasti produkti pēc izvēlētajiem filtriem.</div>';
+        return;
+      }
+
+      grid.innerHTML = filteredLaptops.map((laptop, index) => `
+        <div class="product-card" onclick="viewLaptop(${laptops.indexOf(laptop)})">
+          <img class="product-img" src="${laptop.imageUrl}" alt="${laptop.brand} ${laptop.model}">
+          <div class="product-info">
+            <div class="product-brand">${laptop.brand}</div>
+            <div class="product-model">${laptop.model}</div>
+            <div class="condition-badge condition-${laptop.condition}">${conditionLabels[laptop.condition] || laptop.condition}</div>
+            <div class="product-specs">
+              ${laptop.processor}<br>
+              ${laptop.ram} • ${laptop.storage}<br>
+              ${laptop.screen}
+            </div>
+            <div class="product-price">$${laptop.price}</div>
+            <button class="view-btn">Apskatīt Detaļas</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function viewLaptop(id) {
+      window.location.href = `laptop-detail.html?id=${id}`;
+    }
+
+    function applyFilters() {
+      const brandFilter = document.getElementById('brandFilter').value;
+      const conditionFilter = document.getElementById('conditionFilter').value;
+      const sortFilter = document.getElementById('sortFilter').value;
+
+      // Apply filters
+      filteredLaptops = laptops.filter(laptop => {
+        const brandMatch = brandFilter === 'all' || laptop.brand === brandFilter;
+        const conditionMatch = conditionFilter === 'all' || laptop.condition === conditionFilter;
+        return brandMatch && conditionMatch;
+      });
+
+      // Apply sorting
+      if (sortFilter === 'price-low') {
+        filteredLaptops.sort((a, b) => a.price - b.price);
+      } else if (sortFilter === 'price-high') {
+        filteredLaptops.sort((a, b) => b.price - a.price);
+      } else if (sortFilter === 'brand') {
+        filteredLaptops.sort((a, b) => a.brand.localeCompare(b.brand));
+      }
+
+      renderProducts();
+    }
+
+    // Event listeners for filters
+    document.getElementById('brandFilter').addEventListener('change', applyFilters);
+    document.getElementById('conditionFilter').addEventListener('change', applyFilters);
+    document.getElementById('sortFilter').addEventListener('change', applyFilters);
+
+    // Initial render
+    applyFilters();
+
+    // Reload laptops when page becomes visible
+    document.addEventListener('visibilitychange', function() {
+      if (!document.hidden) {
+        laptops = JSON.parse(localStorage.getItem('laptops')) || getDefaultLaptops();
+        applyFilters();
+      }
+    });
+  </script>
+</body>
+</html>

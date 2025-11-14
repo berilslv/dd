@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <title>Kontakti | LaptopHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:400,600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f4f5f7;
+      color: #222e36;
+    }
+
+    /* Navigation */
+    nav {
+      background: #233259;
+      padding: 16px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #fff;
+      text-decoration: none;
+    }
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 32px;
+      align-items: center;
+    }
+    .nav-menu a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .nav-menu a:hover {
+      opacity: 0.8;
+    }
+    .admin-link {
+      background: #425671;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    /* Page Header */
+    .page-header {
+      background: linear-gradient(120deg, #233259 0%, #425671 100%);
+      padding: 50px 20px;
+      text-align: center;
+      color: #fff;
+    }
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .page-subtitle {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    /* Contact Section */
+    .contact-section {
+      max-width: 1000px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    /* Contact Form */
+    .contact-form-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(44, 62, 80, 0.08);
+      padding: 40px;
+    }
+    .form-title {
+      font-size: 1.8rem;
+      color: #233259;
+      margin-bottom: 10px;
+    }
+    .form-subtitle {
+      color: #5a6b7d;
+      margin-bottom: 25px;
+      font-size: 0.95rem;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-label {
+      display: block;
+      font-weight: 600;
+      color: #233259;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid #b3bfcf;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: #233259;
+    }
+    .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+    .submit-btn {
+      width: 100%;
+      background: #233259;
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.14s;
+      margin-top: 10px;
+    }
+    .submit-btn:hover {
+      background: #425671;
+    }
+
+    /* Contact Info */
+    .contact-info-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(44, 62, 80, 0.08);
+      padding: 40px;
+    }
+    .info-title {
+      font-size: 1.8rem;
+      color: #233259;
+      margin-bottom: 25px;
+    }
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    .info-item:last-child {
+      margin-bottom: 0;
+    }
+    .info-icon {
+      font-size: 1.5rem;
+      color: #233259;
+      min-width: 30px;
+    }
+    .info-content h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #233259;
+      margin-bottom: 5px;
+    }
+    .info-content p {
+      font-size: 0.95rem;
+      color: #5a6b7d;
+      line-height: 1.6;
+    }
+    .info-content a {
+      color: #233259;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .info-content a:hover {
+      text-decoration: underline;
+    }
+
+    /* Map Section */
+    .map-section {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(44, 62, 80, 0.08);
+      padding: 40px;
+      text-align: center;
+    }
+    .map-title {
+      font-size: 1.8rem;
+      color: #233259;
+      margin-bottom: 20px;
+    }
+    .map-placeholder {
+      width: 100%;
+      height: 350px;
+      background: linear-gradient(135deg, #eef1f5 0%, #d4dae1 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #5a6b7d;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    /* Business Hours */
+    .hours-section {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 25px;
+      margin-top: 30px;
+    }
+    .hours-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #233259;
+      margin-bottom: 15px;
+    }
+    .hours-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #e0e4e8;
+    }
+    .hours-item:last-child {
+      border-bottom: none;
+    }
+    .hours-day {
+      font-weight: 600;
+      color: #233259;
+    }
+    .hours-time {
+      color: #5a6b7d;
+    }
+
+    /* Footer */
+    footer {
+      background: #2d3a4c;
+      color: #d4dae1;
+      padding: 30px 20px;
+      text-align: center;
+      margin-top: 60px;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: #d4dae1;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover {
+      color: #fff;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .page-title {
+        font-size: 1.8rem;
+      }
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+      .contact-form-card,
+      .contact-info-card,
+      .map-section {
+        padding: 30px 25px;
+      }
+      .nav-menu {
+        gap: 18px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">💼 LaptopHub</a>
+      <ul class="nav-menu">
+        <li><a href="index.html">Sākums</a></li>
+        <li><a href="products.html">Veikals</a></li>
+        <li><a href="about.html">Par Mums</a></li>
+        <li><a href="contact.html">Kontakti</a></li>
+        <li><a href="login.html" class="admin-link">Admin</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-title">Sazinies ar Mums</div>
+    <div class="page-subtitle">Mēs vienmēr esam gatavi palīdzēt un atbildēt uz jūsu jautājumiem</div>
+  </div>
+
+  <!-- Contact Section -->
+  <div class="contact-section">
+    <div class="contact-grid">
+      <!-- Contact Form -->
+      <div class="contact-form-card">
+        <h2 class="form-title">Sūtīt Ziņu</h2>
+        <p class="form-subtitle">Aizpildiet formu, un mēs ar jums sazināsimies tuvākajā laikā!</p>
+        <form id="contactForm">
+          <div class="form-group">
+            <label class="form-label" for="name">Vārds *</label>
+            <input type="text" id="name" name="name" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">E-pasts *</label>
+            <input type="email" id="email" name="email" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="phone">Telefons</label>
+            <input type="tel" id="phone" name="phone" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="message">Ziņa *</label>
+            <textarea id="message" name="message" class="form-textarea" required></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Nosūtīt Ziņu</button>
+        </form>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="contact-info-card">
+        <h2 class="info-title">Kontaktinformācija</h2>
+
+        <div class="info-item">
+          <div class="info-icon">📍</div>
+          <div class="info-content">
+            <h3>Adrese</h3>
+            <p>Brīvības iela 123<br>Rīga, LV-1001<br>Latvija</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon">📧</div>
+          <div class="info-content">
+            <h3>E-pasts</h3>
+            <p><a href="mailto:info@laptophub.lv">info@laptophub.lv</a><br>
+            <a href="mailto:support@laptophub.lv">support@laptophub.lv</a></p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon">📞</div>
+          <div class="info-content">
+            <h3>Telefons</h3>
+            <p><a href="tel:+37120123456">+371 20 123 456</a><br>
+            Darba dienās: 9:00 - 18:00</p>
+          </div>
+        </div>
+
+        <div class="hours-section">
+          <h3 class="hours-title">Darba Laiks</h3>
+          <div class="hours-item">
+            <span class="hours-day">Pirmdiena - Piektdiena</span>
+            <span class="hours-time">9:00 - 18:00</span>
+          </div>
+          <div class="hours-item">
+            <span class="hours-day">Sestdiena</span>
+            <span class="hours-time">10:00 - 15:00</span>
+          </div>
+          <div class="hours-item">
+            <span class="hours-day">Svētdiena</span>
+            <span class="hours-time">Slēgts</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="map-section">
+      <h2 class="map-title">Mūsu Atrašanās Vieta</h2>
+      <div class="map-placeholder">
+        🗺️ Karte (Google Maps integrācija)
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="index.html">Sākums</a>
+      <a href="products.html">Veikals</a>
+      <a href="about.html">Par Mums</a>
+      <a href="contact.html">Kontakti</a>
+    </div>
+    <p>&copy; 2024 LaptopHub. Visas tiesības aizsargātas.</p>
+  </footer>
+
+  <script>
+    // Contact form handler
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const name = formData.get('name');
+      const email = formData.get('email');
+      const phone = formData.get('phone');
+      const message = formData.get('message');
+
+      // In a real application, this would send data to a server
+      alert(`Paldies, ${name}!\n\nJūsu ziņa ir saņemta. Mēs ar jums sazināsimies tuvākajā laikā uz e-pastu: ${email}`);
+
+      this.reset();
+    });
+  </script>
+</body>
+</html>
