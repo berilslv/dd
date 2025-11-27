@@ -1,0 +1,76 @@
+/* Form Components */
+.admin-form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  font-size: 1rem;
+  font-family: var(--font-family);
+  transition: border-color 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.filter-select {
+  padding: 10px 15px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  font-size: 1rem;
+  font-family: var(--font-family);
+  background: var(--card-bg);
+  cursor: pointer;
+}
+
+/* Newsletter Form */
+.newsletter form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.newsletter input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  font-size: 1rem;
+  font-family: var(--font-family);
+}
+
+.newsletter input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.newsletter button {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 11px 40px;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background 0.13s;
+}
+
+.newsletter button:hover {
+  background: var(--secondary-color);
+}

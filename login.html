@@ -5,229 +5,15 @@
   <title>Admin Login | LaptopHub</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:400,600&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #233259 0%, #425671 100%);
-      color: #222e36;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Navigation */
-    nav {
-      background: rgba(0, 0, 0, 0.2);
-      padding: 16px 0;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .logo {
-      font-size: 1.4rem;
-      font-weight: 600;
-      color: #fff;
-      text-decoration: none;
-    }
-    .nav-menu {
-      display: flex;
-      list-style: none;
-      gap: 32px;
-      align-items: center;
-    }
-    .nav-menu a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 500;
-      transition: opacity 0.2s;
-    }
-    .nav-menu a:hover {
-      opacity: 0.8;
-    }
-
-    /* Login Section */
-    .login-section {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 20px;
-    }
-    .login-card {
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-      padding: 50px 45px;
-      max-width: 450px;
-      width: 100%;
-    }
-    .login-header {
-      text-align: center;
-      margin-bottom: 35px;
-    }
-    .login-icon {
-      font-size: 3.5rem;
-      margin-bottom: 15px;
-    }
-    .login-title {
-      font-size: 2rem;
-      color: #233259;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-    .login-subtitle {
-      color: #5a6b7d;
-      font-size: 0.95rem;
-    }
-
-    /* Form Styles */
-    .form-group {
-      margin-bottom: 25px;
-    }
-    .form-label {
-      display: block;
-      font-weight: 600;
-      color: #233259;
-      margin-bottom: 8px;
-      font-size: 0.95rem;
-    }
-    .form-input {
-      width: 100%;
-      padding: 14px 16px;
-      border-radius: 8px;
-      border: 1px solid #b3bfcf;
-      font-size: 1rem;
-      font-family: 'Poppins', sans-serif;
-      transition: border-color 0.2s;
-    }
-    .form-input:focus {
-      outline: none;
-      border-color: #233259;
-    }
-    .password-container {
-      position: relative;
-    }
-    .toggle-password {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: #5a6b7d;
-      cursor: pointer;
-      font-size: 1.2rem;
-      padding: 5px;
-      transition: color 0.2s;
-    }
-    .toggle-password:hover {
-      color: #233259;
-    }
-
-    .remember-forgot {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-      font-size: 0.9rem;
-    }
-    .remember-me {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #5a6b7d;
-    }
-    .remember-me input[type="checkbox"] {
-      cursor: pointer;
-    }
-    .forgot-link {
-      color: #233259;
-      text-decoration: none;
-      font-weight: 500;
-      transition: opacity 0.2s;
-    }
-    .forgot-link:hover {
-      opacity: 0.7;
-    }
-
-    .login-btn {
-      width: 100%;
-      background: #233259;
-      color: #fff;
-      border: none;
-      padding: 14px;
-      border-radius: 8px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.14s;
-      margin-bottom: 20px;
-    }
-    .login-btn:hover {
-      background: #425671;
-    }
-
-    .back-link {
-      text-align: center;
-      color: #5a6b7d;
-      font-size: 0.95rem;
-    }
-    .back-link a {
-      color: #233259;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .back-link a:hover {
-      text-decoration: underline;
-    }
-
-    .error-message {
-      background: #f8d7da;
-      color: #721c24;
-      padding: 12px 16px;
-      border-radius: 6px;
-      margin-bottom: 20px;
-      font-size: 0.9rem;
-      display: none;
-    }
-    .error-message.show {
-      display: block;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .login-card {
-        padding: 35px 25px;
-      }
-      .login-title {
-        font-size: 1.6rem;
-      }
-      .nav-menu {
-        gap: 18px;
-        font-size: 0.9rem;
-      }
-      .remember-forgot {
-        flex-direction: column;
-        gap: 10px;
-        align-items: flex-start;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="css/base/variables.css">
+  <link rel="stylesheet" href="css/base/reset.css">
+  <link rel="stylesheet" href="css/layout/navigation.css">
+  <link rel="stylesheet" href="css/components/forms.css">
+  <link rel="stylesheet" href="css/pages/login.css">
 </head>
-<body>
+<body class="admin-body">
   <!-- Navigation -->
-  <nav>
+  <nav class="admin-nav">
     <div class="nav-container">
       <a href="index.html" class="logo">💼 LaptopHub</a>
       <ul class="nav-menu">
@@ -286,93 +72,39 @@
   </div>
 
   <script>
-    // Global variable to store uploaded images
-    let uploadedImages = [];
-
-    // Track if we're editing a laptop (now storing laptop ID instead of index)
-    let editingLaptopId = null;
-    let laptopsData = [];
-
-    // Check if already logged in via API
-    async function checkSession() {
-      try {
-        const response = await fetch('/api/auth.php');
-        const result = await response.json();
-
-        if (result.success && result.loggedIn) {
-          showAdminPanel();
-        }
-      } catch (error) {
-        console.error('Error checking session:', error);
-      }
-    }
-
-    checkSession();
-
-    // Image Upload Handlers
-    const uploadArea = document.getElementById('uploadArea');
-    const imageInput = document.getElementById('imageInput');
-    const imagePreviews = document.getElementById('imagePreviews');
-
-    uploadArea.addEventListener('click', () => {
-      imageInput.click();
-    });
-
-    imageInput.addEventListener('change', (e) => {
-      handleImageFiles(e.target.files);
-    });
-
-    uploadArea.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      uploadArea.classList.add('dragover');
-    });
-
-    uploadArea.addEventListener('dragleave', () => {
-      uploadArea.classList.remove('dragover');
-    });
-
-    uploadArea.addEventListener('drop', (e) => {
-      e.preventDefault();
-      uploadArea.classList.remove('dragover');
-      handleImageFiles(e.dataTransfer.files);
-    });
+    // Admin credentials (for demo purposes - in production, use proper backend authentication)
+    const ADMIN_USERNAME = 'admin';
+    const ADMIN_PASSWORD = 'admin123';
 
     // Check if already logged in
     if (localStorage.getItem('adminLoggedIn') === 'true') {
       window.location.href = 'add_laptops.html';
     }
 
-    // Rating Sliders
-    const visualRating = document.getElementById('visualRating');
-    const technicalRating = document.getElementById('technicalRating');
-    const visualRatingValue = document.getElementById('visualRatingValue');
-    const technicalRatingValue = document.getElementById('technicalRatingValue');
-
-    visualRating.addEventListener('input', (e) => {
-      visualRatingValue.textContent = e.target.value;
-    });
-
-    technicalRating.addEventListener('input', (e) => {
-      technicalRatingValue.textContent = e.target.value;
-    });
+    // Hide error message initially
+    const errorMessage = document.getElementById('errorMessage');
+    errorMessage.style.display = 'none';
 
     // Login form handler
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
-      const errorMessage = document.getElementById('errorMessage');
       const submitBtn = this.querySelector('button[type="submit"]');
 
+      // Disable button during processing
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Apstrādā...';
+
+      // Simple client-side authentication (for static hosting)
       if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
         localStorage.setItem('adminLoggedIn', 'true');
-        errorMessage.classList.remove('show');
+        errorMessage.style.display = 'none';
         // Redirect to add laptops page
         window.location.href = 'add_laptops.html';
       } else {
-        errorMessage.classList.add('show');
-      } finally {
+        errorMessage.style.display = 'block';
         submitBtn.disabled = false;
         submitBtn.textContent = 'Ielogoties';
       }

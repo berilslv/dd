@@ -6,6 +6,13 @@ define('USERS_FILE', DATA_DIR . '/users.json');
 define('CONTACTS_FILE', DATA_DIR . '/contacts.json');
 define('NEWSLETTER_FILE', DATA_DIR . '/newsletter.json');
 
+// File Upload Configuration
+define('UPLOADS_DIR', __DIR__ . '/uploads');
+define('LAPTOP_IMAGES_DIR', UPLOADS_DIR . '/laptops');
+define('MAX_FILE_SIZE', 5 * 1024 * 1024); // 5MB
+define('ALLOWED_IMAGE_TYPES', ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']);
+define('ALLOWED_EXTENSIONS', ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+
 // Security settings
 define('SESSION_LIFETIME', 3600); // 1 hour in seconds
 define('ADMIN_SESSION_NAME', 'laptophub_admin');
@@ -139,5 +146,126 @@ function sendJSON($data, $statusCode = 200) {
 // Log error (for production)
 function logError($message) {
     error_log(date('[Y-m-d H:i:s] ') . $message . PHP_EOL, 3, __DIR__ . '/logs/errors.log');
+}
+
+// File Upload Functions
+function ensureUploadDirExists($dir) {
+    if (!is_dir($dir)) {
+        mkdir($dir, 0755, true);
+    }
+}
+
+function validateImageFile($file) {
+    // Check if file was uploaded
+    if (!isset($file['tmp_name']) || !is_uploaded_file($file['tmp_name'])) {
+        return ['valid' => false, 'error' => 'No file was uploaded'];
+    }
+
+    // Check file size
+    if ($file['size'] > MAX_FILE_SIZE) {
+        return ['valid' => false, 'error' => 'File size exceeds maximum allowed size (5MB)'];
+    }
+
+    // Check file type
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mimeType = finfo_file($finfo, $file['tmp_name']);
+    finfo_close($finfo);
+
+    if (!in_array($mimeType, ALLOWED_IMAGE_TYPES)) {
+        return ['valid' => false, 'error' => 'Invalid file type. Only JPG, PNG, GIF, and WebP images are allowed'];
+    }
+
+    // Check file extension
+    $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if (!in_array($extension, ALLOWED_EXTENSIONS)) {
+        return ['valid' => false, 'error' => 'Invalid file extension'];
+    }
+
+    return ['valid' => true, 'extension' => $extension];
+}
+
+function saveUploadedImage($file, $directory, $prefix = 'img') {
+    $validation = validateImageFile($file);
+
+    if (!$validation['valid']) {
+        return ['success' => false, 'error' => $validation['error']];
+    }
+
+    ensureUploadDirExists($directory);
+
+    // Generate unique filename
+    $extension = $validation['extension'];
+    $filename = $prefix . '_' . uniqid() . '_' . time() . '.' . $extension;
+    $filepath = $directory . '/' . $filename;
+
+    // Move uploaded file
+    if (!move_uploaded_file($file['tmp_name'], $filepath)) {
+        return ['success' => false, 'error' => 'Failed to save uploaded file'];
+    }
+
+    // Return relative path from web root
+    $relativePath = str_replace(__DIR__ . '/', '', $filepath);
+
+    return [
+        'success' => true,
+        'path' => $relativePath,
+        'filename' => $filename
+    ];
+}
+
+function saveBase64Image($base64Data, $directory, $prefix = 'img') {
+    // Check if it's a data URI
+    if (preg_match('/^data:image\/(\w+);base64,/', $base64Data, $matches)) {
+        $imageType = strtolower($matches[1]);
+        $base64Data = substr($base64Data, strpos($base64Data, ',') + 1);
+
+        // Validate image type
+        if (!in_array($imageType, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+            return ['success' => false, 'error' => 'Invalid image type'];
+        }
+
+        $extension = $imageType === 'jpg' ? 'jpeg' : $imageType;
+    } else {
+        return ['success' => false, 'error' => 'Invalid base64 image format'];
+    }
+
+    $imageData = base64_decode($base64Data);
+
+    if ($imageData === false) {
+        return ['success' => false, 'error' => 'Failed to decode base64 image'];
+    }
+
+    // Check file size
+    if (strlen($imageData) > MAX_FILE_SIZE) {
+        return ['success' => false, 'error' => 'Image size exceeds maximum allowed size (5MB)'];
+    }
+
+    ensureUploadDirExists($directory);
+
+    // Generate unique filename
+    $filename = $prefix . '_' . uniqid() . '_' . time() . '.' . $extension;
+    $filepath = $directory . '/' . $filename;
+
+    // Save file
+    if (file_put_contents($filepath, $imageData) === false) {
+        return ['success' => false, 'error' => 'Failed to save image file'];
+    }
+
+    // Return relative path from web root
+    $relativePath = str_replace(__DIR__ . '/', '', $filepath);
+
+    return [
+        'success' => true,
+        'path' => $relativePath,
+        'filename' => $filename
+    ];
+}
+
+function deleteImageFile($path) {
+    $fullPath = __DIR__ . '/' . $path;
+    if (file_exists($fullPath) && is_file($fullPath)) {
+        return unlink($fullPath);
+    }
+    return false;
 }
 ?>
